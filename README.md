@@ -10,11 +10,11 @@
 ## Setting
 * Image    
 	1. install docker in your device
-	2. download **image** from `ftp:/Docker_image/fer_offline/fer_offline.tar.gz`
-	3. `gunzip -c fer_offline.tar.gz | docker load`
+	2. use your account login to gitlab `docker login biicgitlab.ee.nthu.edu.tw:5050`
+	3. download the image `docker pull biicgitlab.ee.nthu.edu.tw:5050/prod/engineer/fer_offline`
 
 * Code Structure
-	1. `git clone https://biicgitlab.ee.nthu.edu.tw/prod/engineer/fer_batch_processing.git`
+	1. `git clone https://biicgitlab.ee.nthu.edu.tw/prod/engineer/fer_offline.git`
 
 ## Run 
 
