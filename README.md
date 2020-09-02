@@ -3,7 +3,7 @@
 > last update: 2020.08.19    
 > 
 > @ author: Chun-Yu Chen  
-> @ email: f64051114@gs.ncku.edu.tw     
+> @ email: adam@gapp.nthu.edu.tw  
 > @ mattermost: chen-chun-yu  
 
 
