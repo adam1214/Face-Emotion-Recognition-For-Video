@@ -45,7 +45,7 @@
      
    do all files in `fer_input/` without input folder name
 	* if your OS is UBUNTU, run `bash docker_run.sh`
-	* if your OS is UBUNTU, run `docker_run.bat` 
+	* if your OS is WINDOWS, run `docker_run.bat` 
 
 4. Check result in the `fer_output` and `fer_result` folder 
 5. The original files and folder will be moved to `fer_finished/*`
