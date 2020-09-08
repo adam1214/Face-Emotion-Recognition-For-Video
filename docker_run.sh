@@ -1,5 +1,5 @@
 export FER_ROOT=$(pwd)
-PROJECT_NAME="fer_batch_processing"
+PROJECT_NAME="fer_offline"
 
 if [ $# -eq 0 ]
 then
