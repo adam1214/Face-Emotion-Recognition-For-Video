@@ -24,3 +24,4 @@ else
     biicgitlab.ee.nthu.edu.tw:5050/prod/engineer/fer_offline \
     /bin/bash -c "python3 main.py fer_input/$1 fer_output/$1 fer_result/$1 fer_finished/$1 fer_model/ 720p"
 fi
+

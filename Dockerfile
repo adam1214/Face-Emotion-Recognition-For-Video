@@ -64,6 +64,6 @@ RUN ln -s \
   /usr/local/lib/python3.7/site-packages/cv2.so
 
 RUN cd /media \
- && git clone https://Engineer:SPARKspark@biicgitlab.ee.nthu.edu.tw/prod/engineer/fer_batch_processing.git
+ && git clone https://Engineer:SPARKspark@biicgitlab.ee.nthu.edu.tw/prod/engineer/fer_offline.git
 
-WORKDIR /media/fer_batch_processing
+WORKDIR /media/fer_offline

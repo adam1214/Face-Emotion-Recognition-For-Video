@@ -1,6 +1,6 @@
 @echo OFF
 set FER_ROOT="%cd%"
-set PROJECT_NAME="fer_batch_processing"
+set PROJECT_NAME="fer_offline"
 
 IF [%1] == [] (
 	echo NO arguments passed

@@ -81,6 +81,7 @@ def fun(in_path, out_video_path,
         print(video_path)
         no_root_path = video_path[len(input_video_root):].replace(video_path.split('/')[-1], '')
         video_capture = cv2.VideoCapture(video_path)
+        video_cap_ori = video_capture
         video_name = video_path.split('/')[-1].split('.mp4')[0]
         ori_video_name = video_path.split('/')[-1]
 
@@ -89,7 +90,8 @@ def fun(in_path, out_video_path,
         size = (round(video_capture.get(3)), round(video_capture.get(4))) # float
         ori_size = size
         reduce_resolution = 0
-        scaling_factor = 1
+        scaling_factor_x = 1
+        scaling_factor_y = 1
         if video_resolution == "720p" and size[0] > 1280 and size[1] > 720:
             #need to reduce resolution to 720p
             reduce_resolution = 1
@@ -106,7 +108,8 @@ def fun(in_path, out_video_path,
             video_capture.release()
             out.release()
             
-            scaling_factor = size[0]/1280
+            scaling_factor_x = size[0]/1280
+            scaling_factor_y = size[1]/720
 
             #original resolution video move to fer_finished dir 
             src = video_path
@@ -184,10 +187,10 @@ def fun(in_path, out_video_path,
                                 emotion_mode = mode(emotion_window)
                             except:
                                 continue
-                            x = int(float(face_coordinates[0]*scaling_factor))
-                            y = int(float(face_coordinates[1]*scaling_factor))
-                            w = int(float(face_coordinates[2]*scaling_factor))
-                            h = int(float(face_coordinates[3]*scaling_factor))
+                            x = int(float(face_coordinates[0]*scaling_factor_x))
+                            y = int(float(face_coordinates[1]*scaling_factor_y))
+                            w = int(float(face_coordinates[2]*scaling_factor_x))
+                            h = int(float(face_coordinates[3]*scaling_factor_y))
                             if emotion_text == 'angry':
                                 cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (255,0,0), 4)
                                 cv2.putText(bgr_image_ori, 'angry', (int(float(x+w/2-43)), y-10), cv2.FONT_HERSHEY_DUPLEX, 1, (255, 0, 0), 1, cv2.LINE_AA)
@@ -212,8 +215,8 @@ def fun(in_path, out_video_path,
 
                         if save_info:
                             op_info_list = [round(frame_idx/fps_float, 3), frame_idx,
-                                            face_coordinates[0]*scaling_factor, face_coordinates[1]*scaling_factor,
-                                            face_coordinates[2]*scaling_factor, face_coordinates[3]*scaling_factor]
+                                            face_coordinates[0]*scaling_factor_x, face_coordinates[1]*scaling_factor_y,
+                                            face_coordinates[2]*scaling_factor_x, face_coordinates[3]*scaling_factor_y]
                             for i in range(len(op_info_list)):
                                 op_info_list[i] = str(op_info_list[i])
                             if detect_emo:
