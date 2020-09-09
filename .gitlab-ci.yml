@@ -1,0 +1,31 @@
+stages:
+  - build
+  - deploy
+  - test
+
+stg-build:
+  stage: build
+  tags:
+    - "shell"
+  only:
+    - master
+  script:
+    - echo "stg build"
+
+stg-deploy:
+  stage: deploy
+  tags:
+    - "shell"
+  only:
+    - master
+  script:
+    - echo "stg deploy"
+
+stg-test:
+  stage: test
+  tags:
+    - "shell"
+  only:
+    - master
+  script:
+    - echo "stg testing"
