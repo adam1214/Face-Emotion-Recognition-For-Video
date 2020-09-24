@@ -1,31 +1,38 @@
 stages:
-  - build
-  - deploy
+  - exe_env_build
+  - test_env_build
   - test
 
-stg-build:
-  stage: build
+exe_env_build:
+  stage: exe_env_build
   tags:
     - "shell"
-  only:
-    - master
   script:
-    - echo "stg build"
+    - echo "build docker image..."
+    - sudo docker build -t biicgitlab.ee.nthu.edu.tw:5050/prod/engineer/fer_offline .
+    - echo "docker image has been built"
 
-stg-deploy:
-  stage: deploy
+test_env_build:
+  stage: test_env_build
   tags:
     - "shell"
-  only:
-    - master
   script:
-    - echo "stg deploy"
+    - echo "build pytest env..."
+    - pip install pytest
+    - pip install pytest-html
+    - pip install pytest-sugar
+    - pip install pytest-icdiff
 
-stg-test:
+
+test:
   stage: test
   tags:
     - "shell"
-  only:
-    - master
   script:
-    - echo "stg testing"
+    - echo "pytest..."
+    - py.test -vv --html=report.html --self-contained-html --durations=6
+    - echo "Finish"
+  artifacts:
+    paths:
+      - ./report.html
+

@@ -1,6 +1,6 @@
 # FER Offline
 > **Engineer Team**  
-> last update: 2020.08.19    
+> last update: 2020.09.24    
 > 
 > @ author: Chun-Yu Chen  
 > @ email: adam@gapp.nthu.edu.tw  
