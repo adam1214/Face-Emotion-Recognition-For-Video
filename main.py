@@ -7,10 +7,10 @@ Created on TUE July 21 10:00:00 2020
 
 """
 import sys
-import peter_video_emotion_color_demo
+import video_emotion_color_demo
 
 if __name__ == "__main__":
-    peter_video_emotion_color_demo.fun(
+    video_emotion_color_demo.fun(
         str(sys.argv[1]), str(sys.argv[2]), str(sys.argv[3]), str(sys.argv[4]), str(sys.argv[5]), str(sys.argv[6]))
     print('input file path:', str(sys.argv[1]))
     print('output video file path:', str(sys.argv[2]))

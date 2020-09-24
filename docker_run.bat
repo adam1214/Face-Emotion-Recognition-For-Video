@@ -4,7 +4,7 @@ set PROJECT_NAME="fer_offline"
 
 IF [%1] == [] (
 	echo NO arguments passed
-	docker run -ti --rm ^
+	docker run --rm ^
 	-v %FER_ROOT%/fer_input:/media/%PROJECT_NAME%/fer_input ^
 	-v %FER_ROOT%/fer_output:/media/%PROJECT_NAME%/fer_output ^
 	-v %FER_ROOT%/fer_finished:/media/%PROJECT_NAME%/fer_finished ^
@@ -14,7 +14,7 @@ IF [%1] == [] (
 	/bin/bash -c "python3 main.py fer_input/ fer_output/ fer_result/ fer_finished/ fer_model/ 720p"
 	) ELSE	(
 	echo Arguments passed
-	docker run -ti --rm  ^
+	docker run --rm  ^
 	-v %FER_ROOT%/fer_input:/media/%PROJECT_NAME%/fer_input ^
 	-v %FER_ROOT%/fer_output:/media/%PROJECT_NAME%/fer_output ^
 	-v %FER_ROOT%/fer_finished:/media/%PROJECT_NAME%/fer_finished ^

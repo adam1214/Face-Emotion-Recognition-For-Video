@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Test Report</title>
+    <style>body {
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	/* do not increase min-width as some may use split screens */
+	min-width: 800px;
+	color: #999;
+}
+
+h1 {
+	font-size: 24px;
+	color: black;
+}
+
+h2 {
+	font-size: 16px;
+	color: black;
+}
+
+p {
+    color: black;
+}
+
+a {
+	color: #999;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+/******************************
+ * SUMMARY INFORMATION
+ ******************************/
+
+#environment td {
+	padding: 5px;
+	border: 1px solid #E6E6E6;
+}
+
+#environment tr:nth-child(odd) {
+	background-color: #f6f6f6;
+}
+
+/******************************
+ * TEST RESULT COLORS
+ ******************************/
+span.passed, .passed .col-result {
+	color: green;
+}
+span.skipped, span.xfailed, span.rerun, .skipped .col-result, .xfailed .col-result, .rerun .col-result {
+	color: orange;
+}
+span.error, span.failed, span.xpassed, .error .col-result, .failed .col-result, .xpassed .col-result  {
+	color: red;
+}
+
+
+/******************************
+ * RESULTS TABLE
+ *
+ * 1. Table Layout
+ * 2. Extra
+ * 3. Sorting items
+ *
+ ******************************/
+
+/*------------------
+ * 1. Table Layout
+ *------------------*/
+
+#results-table {
+	border: 1px solid #e6e6e6;
+	color: #999;
+	font-size: 12px;
+	width: 100%
+}
+
+#results-table th, #results-table td {
+	padding: 5px;
+	border: 1px solid #E6E6E6;
+	text-align: left
+}
+#results-table th {
+	font-weight: bold
+}
+
+/*------------------
+ * 2. Extra
+ *------------------*/
+
+.log:only-child {
+	height: inherit
+}
+.log {
+	background-color: #e6e6e6;
+	border: 1px solid #e6e6e6;
+	color: black;
+	display: block;
+	font-family: "Courier New", Courier, monospace;
+	height: 230px;
+	overflow-y: scroll;
+	padding: 5px;
+	white-space: pre-wrap
+}
+div.image {
+	border: 1px solid #e6e6e6;
+	float: right;
+	height: 240px;
+	margin-left: 5px;
+	overflow: hidden;
+	width: 320px
+}
+div.image img {
+	width: 320px
+}
+.collapsed {
+	display: none;
+}
+.expander::after {
+	content: " (show details)";
+	color: #BBB;
+	font-style: italic;
+	cursor: pointer;
+}
+.collapser::after {
+	content: " (hide details)";
+	color: #BBB;
+	font-style: italic;
+	cursor: pointer;
+}
+
+/*------------------
+ * 3. Sorting items
+ *------------------*/
+.sortable {
+	cursor: pointer;
+}
+
+.sort-icon {
+	font-size: 0px;
+	float: left;
+	margin-right: 5px;
+	margin-top: 5px;
+	/*triangle*/
+	width: 0;
+	height: 0;
+	border-left: 8px solid transparent;
+	border-right: 8px solid transparent;
+}
+
+.inactive .sort-icon {
+	/*finish triangle*/
+	border-top: 8px solid #E6E6E6;
+}
+
+.asc.active .sort-icon {
+	/*finish triangle*/
+	border-bottom: 8px solid #999;
+}
+
+.desc.active .sort-icon {
+	/*finish triangle*/
+	border-top: 8px solid #999;
+}
+</style></head>
+  <body onLoad="init()">
+    <script>/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+
+function toArray(iter) {
+    if (iter === null) {
+        return null;
+    }
+    return Array.prototype.slice.call(iter);
+}
+
+function find(selector, elem) {
+    if (!elem) {
+        elem = document;
+    }
+    return elem.querySelector(selector);
+}
+
+function find_all(selector, elem) {
+    if (!elem) {
+        elem = document;
+    }
+    return toArray(elem.querySelectorAll(selector));
+}
+
+function sort_column(elem) {
+    toggle_sort_states(elem);
+    var colIndex = toArray(elem.parentNode.childNodes).indexOf(elem);
+    var key;
+    if (elem.classList.contains('numeric')) {
+        key = key_num;
+    } else if (elem.classList.contains('result')) {
+        key = key_result;
+    } else {
+        key = key_alpha;
+    }
+    sort_table(elem, key(colIndex));
+}
+
+function show_all_extras() {
+    find_all('.col-result').forEach(show_extras);
+}
+
+function hide_all_extras() {
+    find_all('.col-result').forEach(hide_extras);
+}
+
+function show_extras(colresult_elem) {
+    var extras = colresult_elem.parentNode.nextElementSibling;
+    var expandcollapse = colresult_elem.firstElementChild;
+    extras.classList.remove("collapsed");
+    expandcollapse.classList.remove("expander");
+    expandcollapse.classList.add("collapser");
+}
+
+function hide_extras(colresult_elem) {
+    var extras = colresult_elem.parentNode.nextElementSibling;
+    var expandcollapse = colresult_elem.firstElementChild;
+    extras.classList.add("collapsed");
+    expandcollapse.classList.remove("collapser");
+    expandcollapse.classList.add("expander");
+}
+
+function show_filters() {
+    var filter_items = document.getElementsByClassName('filter');
+    for (var i = 0; i < filter_items.length; i++)
+        filter_items[i].hidden = false;
+}
+
+function add_collapse() {
+    // Add links for show/hide all
+    var resulttable = find('table#results-table');
+    var showhideall = document.createElement("p");
+    showhideall.innerHTML = '<a href="javascript:show_all_extras()">Show all details</a> / ' +
+                            '<a href="javascript:hide_all_extras()">Hide all details</a>';
+    resulttable.parentElement.insertBefore(showhideall, resulttable);
+
+    // Add show/hide link to each result
+    find_all('.col-result').forEach(function(elem) {
+        var collapsed = get_query_parameter('collapsed') || 'Passed';
+        var extras = elem.parentNode.nextElementSibling;
+        var expandcollapse = document.createElement("span");
+        if (collapsed.includes(elem.innerHTML)) {
+            extras.classList.add("collapsed");
+            expandcollapse.classList.add("expander");
+        } else {
+            expandcollapse.classList.add("collapser");
+        }
+        elem.appendChild(expandcollapse);
+
+        elem.addEventListener("click", function(event) {
+            if (event.currentTarget.parentNode.nextElementSibling.classList.contains("collapsed")) {
+                show_extras(event.currentTarget);
+            } else {
+                hide_extras(event.currentTarget);
+            }
+        });
+    })
+}
+
+function get_query_parameter(name) {
+    var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+}
+
+function init () {
+    reset_sort_headers();
+
+    add_collapse();
+
+    show_filters();
+
+    sort_column(find('.initial-sort'));
+
+    find_all('.sortable').forEach(function(elem) {
+        elem.addEventListener("click",
+                              function(event) {
+                                  sort_column(elem);
+                              }, false)
+    });
+
+};
+
+function sort_table(clicked, key_func) {
+    var rows = find_all('.results-table-row');
+    var reversed = !clicked.classList.contains('asc');
+    var sorted_rows = sort(rows, key_func, reversed);
+    /* Whole table is removed here because browsers acts much slower
+     * when appending existing elements.
+     */
+    var thead = document.getElementById("results-table-head");
+    document.getElementById('results-table').remove();
+    var parent = document.createElement("table");
+    parent.id = "results-table";
+    parent.appendChild(thead);
+    sorted_rows.forEach(function(elem) {
+        parent.appendChild(elem);
+    });
+    document.getElementsByTagName("BODY")[0].appendChild(parent);
+}
+
+function sort(items, key_func, reversed) {
+    var sort_array = items.map(function(item, i) {
+        return [key_func(item), i];
+    });
+
+    sort_array.sort(function(a, b) {
+        var key_a = a[0];
+        var key_b = b[0];
+
+        if (key_a == key_b) return 0;
+
+        if (reversed) {
+            return (key_a < key_b ? 1 : -1);
+        } else {
+            return (key_a > key_b ? 1 : -1);
+        }
+    });
+
+    return sort_array.map(function(item) {
+        var index = item[1];
+        return items[index];
+    });
+}
+
+function key_alpha(col_index) {
+    return function(elem) {
+        return elem.childNodes[1].childNodes[col_index].firstChild.data.toLowerCase();
+    };
+}
+
+function key_num(col_index) {
+    return function(elem) {
+        return parseFloat(elem.childNodes[1].childNodes[col_index].firstChild.data);
+    };
+}
+
+function key_result(col_index) {
+    return function(elem) {
+        var strings = ['Error', 'Failed', 'Rerun', 'XFailed', 'XPassed',
+                       'Skipped', 'Passed'];
+        return strings.indexOf(elem.childNodes[1].childNodes[col_index].firstChild.data);
+    };
+}
+
+function reset_sort_headers() {
+    find_all('.sort-icon').forEach(function(elem) {
+        elem.parentNode.removeChild(elem);
+    });
+    find_all('.sortable').forEach(function(elem) {
+        var icon = document.createElement("div");
+        icon.className = "sort-icon";
+        icon.textContent = "vvv";
+        elem.insertBefore(icon, elem.firstChild);
+        elem.classList.remove("desc", "active");
+        elem.classList.add("asc", "inactive");
+    });
+}
+
+function toggle_sort_states(elem) {
+    //if active, toggle between asc and desc
+    if (elem.classList.contains('active')) {
+        elem.classList.toggle('asc');
+        elem.classList.toggle('desc');
+    }
+
+    //if inactive, reset all other functions and add ascending active
+    if (elem.classList.contains('inactive')) {
+        reset_sort_headers();
+        elem.classList.remove('inactive');
+        elem.classList.add('active');
+    }
+}
+
+function is_all_rows_hidden(value) {
+  return value.hidden == false;
+}
+
+function filter_table(elem) {
+    var outcome_att = "data-test-result";
+    var outcome = elem.getAttribute(outcome_att);
+    class_outcome = outcome + " results-table-row";
+    var outcome_rows = document.getElementsByClassName(class_outcome);
+
+    for(var i = 0; i < outcome_rows.length; i++){
+        outcome_rows[i].hidden = !elem.checked;
+    }
+
+    var rows = find_all('.results-table-row').filter(is_all_rows_hidden);
+    var all_rows_hidden = rows.length == 0 ? true : false;
+    var not_found_message = document.getElementById("not-found-message");
+    not_found_message.hidden = !all_rows_hidden;
+}
+</script>
+    <h1>report.html</h1>
+    <p>Report generated on 24-Sep-2020 at 16:48:02 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v1.22.1</p>
+    <h2>Environment</h2>
+    <table id="environment">
+      <tr>
+        <td>Packages</td>
+        <td>{&apos;py&apos;: &apos;1.9.0&apos;, &apos;pytest&apos;: &apos;4.6.11&apos;, &apos;pluggy&apos;: &apos;0.13.1&apos;}</td></tr>
+      <tr>
+        <td>Platform</td>
+        <td>Linux-5.4.0-48-generic-x86_64-with-Ubuntu-18.04-bionic</td></tr>
+      <tr>
+        <td>Plugins</td>
+        <td>{u&apos;metadata&apos;: u&apos;1.10.0&apos;, u&apos;html&apos;: u&apos;1.22.1&apos;, u&apos;sugar&apos;: u&apos;0.9.4&apos;}</td></tr>
+      <tr>
+        <td>Python</td>
+        <td>2.7.17</td></tr></table>
+    <h2>Summary</h2>
+    <p>2 tests ran in 53.51 seconds. </p>
+    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="passed">0 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="failed">2 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
+    <h2>Results</h2>
+    <table id="results-table">
+      <thead id="results-table-head">
+        <tr>
+          <th class="sortable result initial-sort" col="result">Result</th>
+          <th class="sortable" col="name">Test</th>
+          <th class="sortable numeric" col="duration">Duration</th>
+          <th>Links</th></tr>
+        <tr hidden="true" id="not-found-message">
+          <th colspan="4">No results found. Try to check the filters</th></tr></thead>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">test_a_docker.py::test_mode_1</td>
+          <td class="col-duration">47.36</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">set_up = 3<br/><br/>    def test_mode_1(set_up):<br/>        tt = set_up<br/>        # Run the bat file: mode 1<br/>        if platform.system() == 'Windows':<br/>            subprocess_cmd('docker_run.bat folder1')<br/>        else:<br/>            subprocess_cmd('sudo bash docker_run.sh folder1')<br/>    <br/>        bools = [False for i in range(tt)]<br/>        j = 0<br/>        for root, dirs, files in os.walk('feri_result/folder1'):<br/>            for dir_ in dirs:<br/>                if dir_ != "":<br/>                    for file_ in files:<br/>                        veri_df = pd.read_csv('fer_verification/result/folder1/' + dir_ + '/' + file_ + '.csv', index_col=0)<br/>                        test_df = pd.read_csv('fer_result/folder1/' + dir_ + '/' + file_ + '.csv', index_col=0)<br/>                        bools[j] = veri_df.equals(test_df)<br/>                        j = j+1<br/>&gt;       assert all(x == True for x in bools) == True<br/><span class="error">E       assert False == True</span><br/><span class="error">E         -False</span><br/><span class="error">E         +True</span><br/><br/>test_a_docker.py:89: AssertionError<br/>----------------------------- Captured stdout call -----------------------------<br/>/fer_input/folder2/test.mp4
+
+/fer_input/folder1/Test_2_subject.mp4
+
+Processing frame: 0 ......
+
+Processing frame: 10 ......
+
+Processing frame: 20 ......
+
+Processing frame: 30 ......
+
+Processing frame: 40 ......
+
+Processing frame: 50 ......
+
+Processing frame: 60 ......
+
+Processing frame: 70 ......
+
+Processing frame: 80 ......
+
+Processing frame: 90 ......
+
+Processing frame: 100 ......
+
+Processing frame: 110 ......
+
+Processing frame: 120 ......
+
+Processing frame: 130 ......
+
+Processing frame: 140 ......
+
+Processing frame: 150 ......
+
+Processing frame: 160 ......
+
+Processing frame: 170 ......
+
+Processing frame: 180 ......
+
+Processing frame: 190 ......
+
+Processing frame: 200 ......
+
+Processing frame: 210 ......
+
+/fer_input/folder1/resize_to_720p_Test_2_subject.mp4 DONE!!	Spend Time: 11.705852270126343(s)
+
+/fer_input/folder3/720p.mp4
+
+Processing frame: 0 ......
+
+Processing frame: 10 ......
+
+Processing frame: 20 ......
+
+Processing frame: 30 ......
+
+Processing frame: 40 ......
+
+Processing frame: 50 ......
+
+Processing frame: 60 ......
+
+Processing frame: 70 ......
+
+Processing frame: 80 ......
+
+Processing frame: 90 ......
+
+Processing frame: 100 ......
+
+Processing frame: 110 ......
+
+Processing frame: 120 ......
+
+Processing frame: 130 ......
+
+Processing frame: 140 ......
+
+Processing frame: 150 ......
+
+Processing frame: 160 ......
+
+Processing frame: 170 ......
+
+Processing frame: 180 ......
+
+Processing frame: 190 ......
+
+Processing frame: 200 ......
+
+Processing frame: 210 ......
+
+Processing frame: 220 ......
+
+Processing frame: 230 ......
+
+Processing frame: 240 ......
+
+Processing frame: 250 ......
+
+Processing frame: 260 ......
+
+Processing frame: 270 ......
+
+Processing frame: 280 ......
+
+Processing frame: 290 ......
+
+Processing frame: 300 ......
+
+Processing frame: 310 ......
+
+Processing frame: 320 ......
+
+Processing frame: 330 ......
+
+Processing frame: 340 ......
+
+Processing frame: 350 ......
+
+Processing frame: 360 ......
+
+Processing frame: 370 ......
+
+Processing frame: 380 ......
+
+Processing frame: 390 ......
+
+Processing frame: 400 ......
+
+Processing frame: 410 ......
+
+Processing frame: 420 ......
+
+Processing frame: 430 ......
+
+Processing frame: 440 ......
+
+Processing frame: 450 ......
+
+Processing frame: 460 ......
+
+Processing frame: 470 ......
+
+Processing frame: 480 ......
+
+Processing frame: 490 ......
+
+Processing frame: 500 ......
+
+Processing frame: 510 ......
+
+Processing frame: 520 ......
+
+Processing frame: 530 ......
+
+Processing frame: 540 ......
+
+Processing frame: 550 ......
+
+Processing frame: 560 ......
+
+Processing frame: 570 ......
+
+Processing frame: 580 ......
+
+Processing frame: 590 ......
+
+Processing frame: 600 ......
+
+Processing frame: 610 ......
+
+Processing frame: 620 ......
+
+Processing frame: 630 ......
+
+Processing frame: 640 ......
+
+Processing frame: 650 ......
+
+Processing frame: 660 ......
+
+Processing frame: 670 ......
+
+Processing frame: 680 ......
+
+Processing frame: 690 ......
+
+Processing frame: 700 ......
+
+Processing frame: 710 ......
+
+Processing frame: 720 ......
+
+Processing frame: 730 ......
+
+Processing frame: 740 ......
+
+/fer_input/folder3/720p.mp4 DONE!!	Spend Time: 27.462079763412476(s)
+
+input file path: /fer_input
+
+output video file path: /fer_output
+
+output info file path: /fer_result
+
+input finished path: /fer_finished
+
+model path: /fer_model
+
+only process the video that its resolution is 720p and above
+
+
+<br/>----------------------------- Captured stderr call -----------------------------<br/>docker_run.sh: 列 28: 
+export FER_ROOT=$(pwd)
+PROJECT_NAME="fer_offline"
+
+if [ $# -eq 0 ]
+then
+	echo "NO arguments supplied"
+    docker run --rm \
+    -v ${FER_ROOT}/fer_input:/media/$PROJECT_NAME/fer_input \
+    -v ${FER_ROOT}/fer_output:/media/$PROJECT_NAME/fer_output \
+    -v ${FER_ROOT}/fer_finished:/media/$PROJECT_NAME/fer_finished \
+    -v ${FER_ROOT}/fer_model:/media/$PROJECT_NAME/fer_model \
+    -v ${FER_ROOT}/fer_result:/media/$PROJECT_NAME/fer_result \
+    biicgitlab.ee.nthu.edu.tw:5050/prod/engineer/fer_offline \
+    /bin/bash -c "python3 main.py fer_input/ fer_output/ fer_result/ fer_finished/ fer_model/ 720p"
+
+else
+	echo "Arguments supplied"
+    docker run --rm \
+    -v ${FER_ROOT}/fer_input:/media/$PROJECT_NAME/fer_input \
+    -v ${FER_ROOT}/fer_output:/media/$PROJECT_NAME/fer_output \
+    -v ${FER_ROOT}/fer_finished:/media/$PROJECT_NAME/fer_finished \
+    -v ${FER_ROOT}/fer_model:/media/$PROJECT_NAME/fer_model \
+    -v ${FER_ROOT}/fer_result:/media/$PROJECT_NAME/fer_result \
+    biicgitlab.ee.nthu.edu.tw:5050/prod/engineer/fer_offline \
+    /bin/bash -c "python3 main.py fer_input/$1 fer_output/$1 fer_result/$1 fer_finished/$1 fer_model/ 720p"
+fi
+: 沒有此一檔案或目錄
+Using TensorFlow backend.
+WARNING:tensorflow:From /usr/local/lib/python3.7/site-packages/tensorflow_core/python/ops/resource_variable_ops.py:1630: calling BaseResourceVariable.__init__ (from tensorflow.python.ops.resource_variable_ops) with constraint is deprecated and will be removed in a future version.
+Instructions for updating:
+If using Keras pass *_constraint arguments to layers.
+2020-09-24 08:47:11.900213: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcuda.so.1'; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/local/lib/python3.7/site-packages/cv2/../../../../lib:
+2020-09-24 08:47:11.900282: E tensorflow/stream_executor/cuda/cuda_driver.cc:318] failed call to cuInit: UNKNOWN ERROR (303)
+2020-09-24 08:47:11.900315: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (b6c0786c9ff1): /proc/driver/nvidia/version does not exist
+2020-09-24 08:47:11.901026: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2020-09-24 08:47:11.908529: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2894560000 Hz
+2020-09-24 08:47:11.909453: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5576a26807b0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+2020-09-24 08:47:11.909524: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+WARNING:tensorflow:From /usr/local/lib/python3.7/site-packages/keras/backend/tensorflow_backend.py:4070: The name tf.nn.max_pool is deprecated. Please use tf.nn.max_pool2d instead.
+
+OpenCV: FFMPEG: tag 0x5634504d/'MP4V' is not supported with codec id 12 and format 'mp4 / MP4 (MPEG-4 Part 14)'
+OpenCV: FFMPEG: fallback to use tag 0x7634706d/'mp4v'
+OpenCV: FFMPEG: tag 0x5634504d/'MP4V' is not supported with codec id 12 and format 'mp4 / MP4 (MPEG-4 Part 14)'
+OpenCV: FFMPEG: fallback to use tag 0x7634706d/'mp4v'
+WARNING:tensorflow:From /usr/local/lib/python3.7/site-packages/keras/backend/tensorflow_backend.py:422: The name tf.global_variables is deprecated. Please use tf.compat.v1.global_variables instead.
+
+OpenCV: FFMPEG: tag 0x5634504d/'MP4V' is not supported with codec id 12 and format 'mp4 / MP4 (MPEG-4 Part 14)'
+OpenCV: FFMPEG: fallback to use tag 0x7634706d/'mp4v'
+<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">test_a_docker.py::test_mode_2</td>
+          <td class="col-duration">5.83</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">set_up = 3<br/><br/>    def test_mode_2(set_up):<br/>        n_uids = set_up<br/>        if platform.system() == 'Windows':<br/>            subprocess_cmd('docker_run.bat')<br/>        else:<br/>            subprocess_cmd('sudo bash docker_run.sh')<br/>    <br/>        bools = [False for i in range(n_uids)]<br/>        j = 0<br/>        for root, dirs, files in os.walk('feri_result'):<br/>            for dir_ in dirs:<br/>                if dir_ != "":<br/>                    veri_df = pd.read_csv('fer_verification/result/' + dir_ + '/' + dir_ + '.csv', index_col=0)<br/>                    test_df = pd.read_csv('fer_result/' + dir_ + '/' + dir_ + '.csv', index_col=0)<br/>                    bools[j] = veri_df.equals(test_df)<br/>                    j = j+1<br/>&gt;       assert all(x == True for x in bools) == True<br/><span class="error">E       assert False == True</span><br/><span class="error">E         -False</span><br/><span class="error">E         +True</span><br/><br/>test_a_docker.py:107: AssertionError<br/>----------------------------- Captured stdout call -----------------------------<br/>input file path: /fer_input
+
+output video file path: /fer_output
+
+output info file path: /fer_result
+
+input finished path: /fer_finished
+
+model path: /fer_model
+
+only process the video that its resolution is 720p and above
+
+
+<br/>----------------------------- Captured stderr call -----------------------------<br/>docker_run.sh: 列 28: 
+export FER_ROOT=$(pwd)
+PROJECT_NAME="fer_offline"
+
+if [ $# -eq 0 ]
+then
+	echo "NO arguments supplied"
+    docker run --rm \
+    -v ${FER_ROOT}/fer_input:/media/$PROJECT_NAME/fer_input \
+    -v ${FER_ROOT}/fer_output:/media/$PROJECT_NAME/fer_output \
+    -v ${FER_ROOT}/fer_finished:/media/$PROJECT_NAME/fer_finished \
+    -v ${FER_ROOT}/fer_model:/media/$PROJECT_NAME/fer_model \
+    -v ${FER_ROOT}/fer_result:/media/$PROJECT_NAME/fer_result \
+    biicgitlab.ee.nthu.edu.tw:5050/prod/engineer/fer_offline \
+    /bin/bash -c "python3 main.py fer_input/ fer_output/ fer_result/ fer_finished/ fer_model/ 720p"
+
+else
+	echo "Arguments supplied"
+    docker run --rm \
+    -v ${FER_ROOT}/fer_input:/media/$PROJECT_NAME/fer_input \
+    -v ${FER_ROOT}/fer_output:/media/$PROJECT_NAME/fer_output \
+    -v ${FER_ROOT}/fer_finished:/media/$PROJECT_NAME/fer_finished \
+    -v ${FER_ROOT}/fer_model:/media/$PROJECT_NAME/fer_model \
+    -v ${FER_ROOT}/fer_result:/media/$PROJECT_NAME/fer_result \
+    biicgitlab.ee.nthu.edu.tw:5050/prod/engineer/fer_offline \
+    /bin/bash -c "python3 main.py fer_input/$1 fer_output/$1 fer_result/$1 fer_finished/$1 fer_model/ 720p"
+fi
+: 沒有此一檔案或目錄
+Using TensorFlow backend.
+WARNING:tensorflow:From /usr/local/lib/python3.7/site-packages/tensorflow_core/python/ops/resource_variable_ops.py:1630: calling BaseResourceVariable.__init__ (from tensorflow.python.ops.resource_variable_ops) with constraint is deprecated and will be removed in a future version.
+Instructions for updating:
+If using Keras pass *_constraint arguments to layers.
+2020-09-24 08:47:59.304676: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcuda.so.1'; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/local/lib/python3.7/site-packages/cv2/../../../../lib:
+2020-09-24 08:47:59.304728: E tensorflow/stream_executor/cuda/cuda_driver.cc:318] failed call to cuInit: UNKNOWN ERROR (303)
+2020-09-24 08:47:59.304754: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (0e3f3d9a8e04): /proc/driver/nvidia/version does not exist
+2020-09-24 08:47:59.305076: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2020-09-24 08:47:59.313430: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2894560000 Hz
+2020-09-24 08:47:59.314660: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5561b1ccaee0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+2020-09-24 08:47:59.314725: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+WARNING:tensorflow:From /usr/local/lib/python3.7/site-packages/keras/backend/tensorflow_backend.py:4070: The name tf.nn.max_pool is deprecated. Please use tf.nn.max_pool2d instead.
+
+<br/></div></td></tr></tbody></table></body></html>

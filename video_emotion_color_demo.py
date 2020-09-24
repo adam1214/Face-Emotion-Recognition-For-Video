@@ -160,6 +160,11 @@ def fun(in_path, out_video_path,
                     rgb_image_ori = cv2.cvtColor(bgr_image_ori, cv2.COLOR_BGR2RGB)
 
                     faces = detect_faces(face_detection, gray_image)
+                    if not isinstance(faces, tuple):
+                        faces = faces[faces[:,0].argsort()]
+                        faces = faces[faces[:,1].argsort()]
+                        faces = faces[faces[:,2].argsort()]
+                        faces = faces[faces[:,3].argsort()]
 
                     for face_coordinates in faces:
                         x_1, x_2, y_1, y_2 = apply_offsets(face_coordinates, emotion_offsets)

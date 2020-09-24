@@ -4,7 +4,7 @@ PROJECT_NAME="fer_offline"
 if [ $# -eq 0 ]
 then
 	echo "NO arguments supplied"
-    docker run -ti --rm  --name fer_batch_processing \
+    docker run --rm \
     -v ${FER_ROOT}/fer_input:/media/$PROJECT_NAME/fer_input \
     -v ${FER_ROOT}/fer_output:/media/$PROJECT_NAME/fer_output \
     -v ${FER_ROOT}/fer_finished:/media/$PROJECT_NAME/fer_finished \
@@ -15,7 +15,7 @@ then
 
 else
 	echo "Arguments supplied"
-    docker run -ti --rm  --name fer_batch_processing \
+    docker run --rm \
     -v ${FER_ROOT}/fer_input:/media/$PROJECT_NAME/fer_input \
     -v ${FER_ROOT}/fer_output:/media/$PROJECT_NAME/fer_output \
     -v ${FER_ROOT}/fer_finished:/media/$PROJECT_NAME/fer_finished \
@@ -24,4 +24,3 @@ else
     biicgitlab.ee.nthu.edu.tw:5050/prod/engineer/fer_offline \
     /bin/bash -c "python3 main.py fer_input/$1 fer_output/$1 fer_result/$1 fer_finished/$1 fer_model/ 720p"
 fi
-
