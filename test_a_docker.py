@@ -70,23 +70,18 @@ def set_up():
 
 def test_mode_1(set_up):
     tt = set_up
-    # Run the bat file: mode 1  
+    # Run the specific folder: mode 1  
     if platform.system() == 'Windows':
         subprocess_cmd('docker_run.bat folder1')
     else:
         subprocess_cmd('sudo bash docker_run.sh folder1')
-    
-    bools = [False for i in range(tt)]
-    j = 0
-    for root, dirs, files in os.walk('feri_result/folder1'):
-        for dir_ in dirs:
-            if dir_ != "":
-                for file_ in files:
-                    veri_df = pd.read_csv('fer_verification/result/folder1/' + dir_ + '/' + file_ + '.csv', index_col=0)
-                    test_df = pd.read_csv('fer_result/folder1/' + dir_ + '/' + file_ + '.csv', index_col=0)
-                    bools[j] = veri_df.equals(test_df)
-                    j = j+1
-    assert all(x == True for x in bools) == True
+
+    for root, dirs, files in os.walk('fer_verification/folder1'): 
+        for file_ in files:
+            veri_df = pd.read_csv('fer_verification/result/folder1/' + file_)
+            test_df = pd.read_csv('fer_result/folder1/' + file_)
+            print(veri_df.equals(test_df))
+            assert veri_df.equals(test_df) == True
 
 def test_mode_2(set_up):
     n_uids = set_up
@@ -95,16 +90,14 @@ def test_mode_2(set_up):
     else:
         subprocess_cmd('sudo bash docker_run.sh')
     
-    bools = [False for i in range(n_uids)]
-    j = 0
-    for root, dirs, files in os.walk('feri_result'):
+    for root, dirs, files in os.walk('fer_verification'):
         for dir_ in dirs:
             if dir_ != "":
-                veri_df = pd.read_csv('fer_verification/result/' + dir_ + '/' + dir_ + '.csv', index_col=0)
-                test_df = pd.read_csv('fer_result/' + dir_ + '/' + dir_ + '.csv', index_col=0)
-                bools[j] = veri_df.equals(test_df)
-                j = j+1
-    assert all(x == True for x in bools) == True
+                for file_ in files:
+                    veri_df = pd.read_csv('fer_verification/result/' + dir_ + '/' + file_)
+                    test_df = pd.read_csv('fer_result/' + dir_ + '/' + file_)
+                    print(veri_df.equals(test_df))
+                    assert veri_df.equals(test_df) == True
 
 if __name__ == "__main__":
     pytest.main(['-vv','--html=test_a_docker.html','--self-contained-html','--durations=2', "test_a_docker.py"])
