@@ -55,31 +55,31 @@ def set_up():
     files = folders = 0
     for _, dirnames, filenames in os.walk('fer_input'):
         files += len(filenames)
-        folders += len(dirnames)
-        
+        folders += len(dirnames)    
     yield files
 
     print("\n Teardown...")
     if platform.system() == 'Windows':
-        remove_subdirectory('fer_input')
-        remove_subdirectory('fer_finished')
-        remove_subdirectory('fer_result')
-        remove_subdirectory('fer_output')
+        remove_subdirectory('feri_input')
+        remove_subdirectory('feri_finished')
+        remove_subdirectory('feri_result')
+        remove_subdirectory('feri_output')
     else:
         subprocess_cmd('bash tear_down_linux.sh')
 
+
 def test_mode_1(set_up):
-    tt = set_up
     # Run the specific folder: mode 1  
     if platform.system() == 'Windows':
         subprocess_cmd('docker_run.bat folder1')
     else:
         subprocess_cmd('sudo bash docker_run.sh folder1')
 
-    for root, dirs, files in os.walk('fer_verification/folder1'): 
+    for root, dirs, files in os.walk('fer_verification/result/folder1'): 
         for file_ in files:
             veri_df = pd.read_csv('fer_verification/result/folder1/' + file_)
             test_df = pd.read_csv('fer_result/folder1/' + file_)
+            print('fer_result/folder1/' + file_)
             print(veri_df.equals(test_df))
             assert veri_df.equals(test_df) == True
 
@@ -90,14 +90,21 @@ def test_mode_2(set_up):
     else:
         subprocess_cmd('sudo bash docker_run.sh')
     
-    for root, dirs, files in os.walk('fer_verification'):
-        for dir_ in dirs:
-            if dir_ != "":
-                for file_ in files:
-                    veri_df = pd.read_csv('fer_verification/result/' + dir_ + '/' + file_)
-                    test_df = pd.read_csv('fer_result/' + dir_ + '/' + file_)
-                    print(veri_df.equals(test_df))
-                    assert veri_df.equals(test_df) == True
+    bools = [False for i in range(n_uids)]
+    print(bools)
+    j = 0
+    for root, dirs, files in os.walk('fer_verification/result/'):
+        for file_ in files:
+            test_path = os.path.join(root, file_)[23:]
+            test_path = "fer_result" + test_path
+            veri_df = pd.read_csv(os.path.join(root, file_))
+            test_df = pd.read_csv(test_path)
+            bools[j] = veri_df.equals(test_df)
+            print(test_path)
+            print(veri_df.equals(test_df))
+            j = j+1
+
+    assert all(x == True for x in bools) == True
 
 if __name__ == "__main__":
     pytest.main(['-vv','--html=test_a_docker.html','--self-contained-html','--durations=2', "test_a_docker.py"])

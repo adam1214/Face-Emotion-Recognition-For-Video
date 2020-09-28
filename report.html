@@ -405,7 +405,7 @@ function filter_table(elem) {
 }
 </script>
     <h1>report.html</h1>
-    <p>Report generated on 24-Sep-2020 at 21:32:46 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v1.22.1</p>
+    <p>Report generated on 28-Sep-2020 at 17:44:17 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v1.22.1</p>
     <h2>Environment</h2>
     <table id="environment">
       <tr>
@@ -421,7 +421,7 @@ function filter_table(elem) {
         <td>Python</td>
         <td>2.7.17</td></tr></table>
     <h2>Summary</h2>
-    <p>2 tests ran in 52.77 seconds. </p>
+    <p>2 tests ran in 55.45 seconds. </p>
     <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="passed">2 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="failed">0 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
     <h2>Results</h2>
     <table id="results-table">
@@ -437,7 +437,7 @@ function filter_table(elem) {
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">test_a_docker.py::test_mode_1</td>
-          <td class="col-duration">19.67</td>
+          <td class="col-duration">20.71</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -491,7 +491,7 @@ Processing frame: 200 ......
 
 Processing frame: 210 ......
 
-fer_input/folder1/resize_to_720p_Test_2_subject.mp4 DONE!!	Spend Time: 11.797840356826782(s)
+fer_input/folder1/resize_to_720p_Test_2_subject.mp4 DONE!!	Spend Time: 12.00056505203247(s)
 
 input file path: fer_input/folder1
 
@@ -506,17 +506,21 @@ model path: fer_model/
 only process the video that its resolution is 720p and above
 
 
+fer_result/folder1/test_info.csv
+True
+fer_result/folder1/Test_2_subject_info.csv
+True
 <br/>----------------------------- Captured stderr call -----------------------------<br/>Using TensorFlow backend.
 WARNING:tensorflow:From /usr/local/lib/python3.7/site-packages/tensorflow_core/python/ops/resource_variable_ops.py:1630: calling BaseResourceVariable.__init__ (from tensorflow.python.ops.resource_variable_ops) with constraint is deprecated and will be removed in a future version.
 Instructions for updating:
 If using Keras pass *_constraint arguments to layers.
-2020-09-24 13:31:56.685622: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcuda.so.1'; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/local/lib/python3.7/site-packages/cv2/../../../../lib:
-2020-09-24 13:31:56.685700: E tensorflow/stream_executor/cuda/cuda_driver.cc:318] failed call to cuInit: UNKNOWN ERROR (303)
-2020-09-24 13:31:56.685738: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (71dd8b420ff8): /proc/driver/nvidia/version does not exist
-2020-09-24 13:31:56.686132: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
-2020-09-24 13:31:56.698666: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2894560000 Hz
-2020-09-24 13:31:56.699779: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55e8c0b8b960 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
-2020-09-24 13:31:56.699859: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+2020-09-28 09:43:26.030703: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcuda.so.1'; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/local/lib/python3.7/site-packages/cv2/../../../../lib:
+2020-09-28 09:43:26.030765: E tensorflow/stream_executor/cuda/cuda_driver.cc:318] failed call to cuInit: UNKNOWN ERROR (303)
+2020-09-28 09:43:26.030801: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (c370fe54f21f): /proc/driver/nvidia/version does not exist
+2020-09-28 09:43:26.031257: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2020-09-28 09:43:26.039544: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2894560000 Hz
+2020-09-28 09:43:26.040186: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x558bdbb13c90 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+2020-09-28 09:43:26.040289: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
 WARNING:tensorflow:From /usr/local/lib/python3.7/site-packages/keras/backend/tensorflow_backend.py:4070: The name tf.nn.max_pool is deprecated. Please use tf.nn.max_pool2d instead.
 
 OpenCV: FFMPEG: tag 0x5634504d/'MP4V' is not supported with codec id 12 and format 'mp4 / MP4 (MPEG-4 Part 14)'
@@ -530,7 +534,7 @@ WARNING:tensorflow:From /usr/local/lib/python3.7/site-packages/keras/backend/ten
         <tr>
           <td class="col-result">Passed</td>
           <td class="col-name">test_a_docker.py::test_mode_2</td>
-          <td class="col-duration">32.77</td>
+          <td class="col-duration">34.39</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
@@ -688,7 +692,7 @@ Processing frame: 730 ......
 
 Processing frame: 740 ......
 
-fer_input/folder2/720p.mp4 DONE!!	Spend Time: 27.185161113739014(s)
+fer_input/folder2/720p.mp4 DONE!!	Spend Time: 28.605632781982422(s)
 
 input file path: fer_input/
 
@@ -703,17 +707,24 @@ model path: fer_model/
 only process the video that its resolution is 720p and above
 
 
+[False, False, False]
+fer_result/folder2/720p_info.csv
+True
+fer_result/folder1/test_info.csv
+True
+fer_result/folder1/Test_2_subject_info.csv
+True
 <br/>----------------------------- Captured stderr call -----------------------------<br/>Using TensorFlow backend.
 WARNING:tensorflow:From /usr/local/lib/python3.7/site-packages/tensorflow_core/python/ops/resource_variable_ops.py:1630: calling BaseResourceVariable.__init__ (from tensorflow.python.ops.resource_variable_ops) with constraint is deprecated and will be removed in a future version.
 Instructions for updating:
 If using Keras pass *_constraint arguments to layers.
-2020-09-24 13:32:16.318640: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcuda.so.1'; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/local/lib/python3.7/site-packages/cv2/../../../../lib:
-2020-09-24 13:32:16.318697: E tensorflow/stream_executor/cuda/cuda_driver.cc:318] failed call to cuInit: UNKNOWN ERROR (303)
-2020-09-24 13:32:16.318722: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (df5ef37fc3c0): /proc/driver/nvidia/version does not exist
-2020-09-24 13:32:16.319032: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
-2020-09-24 13:32:16.326900: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2894560000 Hz
-2020-09-24 13:32:16.327669: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x56528bcfd790 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
-2020-09-24 13:32:16.327737: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+2020-09-28 09:43:46.263191: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcuda.so.1'; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/local/lib/python3.7/site-packages/cv2/../../../../lib:
+2020-09-28 09:43:46.263285: E tensorflow/stream_executor/cuda/cuda_driver.cc:318] failed call to cuInit: UNKNOWN ERROR (303)
+2020-09-28 09:43:46.263324: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (47ea5625a42f): /proc/driver/nvidia/version does not exist
+2020-09-28 09:43:46.263666: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2020-09-28 09:43:46.270053: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2894560000 Hz
+2020-09-28 09:43:46.270799: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55a318839bf0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+2020-09-28 09:43:46.270867: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
 WARNING:tensorflow:From /usr/local/lib/python3.7/site-packages/keras/backend/tensorflow_backend.py:4070: The name tf.nn.max_pool is deprecated. Please use tf.nn.max_pool2d instead.
 
 OpenCV: FFMPEG: tag 0x5634504d/'MP4V' is not supported with codec id 12 and format 'mp4 / MP4 (MPEG-4 Part 14)'
