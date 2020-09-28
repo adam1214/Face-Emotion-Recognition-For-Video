@@ -70,18 +70,25 @@ def set_up():
 
 def test_mode_1(set_up):
     # Run the specific folder: mode 1  
+    n_uids = set_up
     if platform.system() == 'Windows':
         subprocess_cmd('docker_run.bat folder1')
     else:
         subprocess_cmd('sudo bash docker_run.sh folder1')
-
+    
+    bools = [False for i in range(n_uids)]
+    print(bools)
+    j = 0
     for root, dirs, files in os.walk('fer_verification/result/folder1'): 
         for file_ in files:
             veri_df = pd.read_csv('fer_verification/result/folder1/' + file_)
             test_df = pd.read_csv('fer_result/folder1/' + file_)
+            bools[j] = veri_df.equals(test_df)
             print('fer_result/folder1/' + file_)
             print(veri_df.equals(test_df))
-            assert veri_df.equals(test_df) == True
+            j = j + 1
+
+    assert all(x == True for x in bools) == True
 
 def test_mode_2(set_up):
     n_uids = set_up
@@ -102,7 +109,7 @@ def test_mode_2(set_up):
             bools[j] = veri_df.equals(test_df)
             print(test_path)
             print(veri_df.equals(test_df))
-            j = j+1
+            j = j + 1
 
     assert all(x == True for x in bools) == True
 
