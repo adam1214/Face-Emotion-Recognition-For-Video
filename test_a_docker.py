@@ -53,7 +53,7 @@ def set_up():
     ''' Move test image to fer_input '''
     copytree('fer_verification/input', 'fer_input')
     files = folders = 0
-    for _, dirnames, filenames in os.walk('fer_input'):
+    for _, dirnames, filenames in os.walk('fer_verification/input'):
         files += len(filenames)
         folders += len(dirnames)    
     yield files
