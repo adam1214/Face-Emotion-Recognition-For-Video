@@ -24,7 +24,7 @@ RUN pip --no-cache-dir install \
     pandas \
     numpy \
     hdf5storage \
-    h5py \
+    h5py==2.10.0 \
     pillow==6.2 \
     scipy==1.2.1 \
     py3nvml \

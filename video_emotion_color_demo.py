@@ -46,6 +46,7 @@ def fun(in_path, out_video_path,
     .csv files will be saved in fer_result folder.
     only process the video that its resolution is 720p and above(video_resolution = 720, can be adjusted)
     """
+    global model, F
     detect_emo = True
 
     #save config
