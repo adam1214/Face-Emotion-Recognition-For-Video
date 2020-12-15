@@ -69,6 +69,6 @@
     * happy_prob
     * sad_prob
     * surprise_prob
-    * neutral_pr
+    * neutral_prob
 3. There are `.mp4` files in the `fer_output` folder. They show the recognized face frame and the current emotion of the face.
 4. After the `.mp4` file in the `fer_input` folder is processed, it will be moved to `fer_finished` folder.
