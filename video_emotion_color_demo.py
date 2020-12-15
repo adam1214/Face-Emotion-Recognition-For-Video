@@ -88,7 +88,7 @@ def fun(in_path, out_video_path,
     # loading models
     face_detection = load_detection_model(detection_model_path)
 
-    info_name = ['time', 'frame', 'face_x', 'face_y', 'face_w', 'face_h', 'emotion']
+    info_name = ['file name', 'face_x', 'face_y', 'face_w', 'face_h', 'emotion', 'angry_prob', 'disgust_prob', 'fear_prob', 'happy_prob', 'sad_prob', 'surprise_prob', 'neutral_prob']
 
     input_video_root = in_path
     output_video_root = out_video_path
