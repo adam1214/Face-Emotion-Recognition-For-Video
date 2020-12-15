@@ -218,26 +218,26 @@ def fun(in_path, out_video_path,
                             w = int(float(face_coordinates[2]*scaling_factor_x))
                             h = int(float(face_coordinates[3]*scaling_factor_y))
                             if emotion_text == 'angry':
-                                cv2.rectangle(image_cap_ori, (x, y), (x+w, y+h), (255,0,0), 4)
-                                cv2.putText(image_cap_ori, 'angry', (int(float(x+w/2-43)), y-10), cv2.FONT_HERSHEY_DUPLEX, 1, (255, 0, 0), 1, cv2.LINE_AA)
+                                cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (255,0,0), 4)
+                                cv2.putText(bgr_image_ori, 'angry', (int(float(x+w/2-43)), y-10), cv2.FONT_HERSHEY_DUPLEX, 1, (255, 0, 0), 1, cv2.LINE_AA)
                             elif emotion_text == 'sad':
-                                cv2.rectangle(image_cap_ori, (x, y), (x+w, y+h), (0,0,255), 4)
-                                cv2.putText(image_cap_ori, 'sad', (int(float(x+w/2-43)), y-10), cv2.FONT_HERSHEY_DUPLEX, 1, (0,0,255), 1, cv2.LINE_AA)
+                                cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (0,0,255), 4)
+                                cv2.putText(bgr_image_ori, 'sad', (int(float(x+w/2-43)), y-10), cv2.FONT_HERSHEY_DUPLEX, 1, (0,0,255), 1, cv2.LINE_AA)
                             elif emotion_text == 'happy':
-                                cv2.rectangle(image_cap_ori, (x, y), (x+w, y+h), (255,255,0), 4)
-                                cv2.putText(image_cap_ori, 'happy', (int(float(x+w/2-43)), y-10), cv2.FONT_HERSHEY_DUPLEX, 1, (255,255,0), 1, cv2.LINE_AA)
+                                cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (255,255,0), 4)
+                                cv2.putText(bgr_image_ori, 'happy', (int(float(x+w/2-43)), y-10), cv2.FONT_HERSHEY_DUPLEX, 1, (255,255,0), 1, cv2.LINE_AA)
                             elif emotion_text == 'surprise':
-                                cv2.rectangle(image_cap_ori, (x, y), (x+w, y+h), (0,255,255), 4)
-                                cv2.putText(image_cap_ori, 'surprise', (int(float(x+w/2-43)), y-10), cv2.FONT_HERSHEY_DUPLEX, 1, (0,255,255), 1, cv2.LINE_AA)
+                                cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (0,255,255), 4)
+                                cv2.putText(bgr_image_ori, 'surprise', (int(float(x+w/2-43)), y-10), cv2.FONT_HERSHEY_DUPLEX, 1, (0,255,255), 1, cv2.LINE_AA)
                             elif emotion_text == 'disgust':
-                                cv2.rectangle(image_cap_ori, (x, y), (x+w, y+h), (0,0,0), 4)
-                                cv2.putText(image_cap_ori, 'disgust', (int(float(x+w/2-43)), y-10), cv2.FONT_HERSHEY_DUPLEX, 1, (0,0,0), 1, cv2.LINE_AA)
+                                cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (0,0,0), 4)
+                                cv2.putText(bgr_image_ori, 'disgust', (int(float(x+w/2-43)), y-10), cv2.FONT_HERSHEY_DUPLEX, 1, (0,0,0), 1, cv2.LINE_AA)
                             elif emotion_text == 'fear':
-                                cv2.rectangle(image_cap_ori, (x, y), (x+w, y+h), (255,0,255), 4)
-                                cv2.putText(image_cap_ori, 'fear', (int(float(x+w/2-43)), y-10), cv2.FONT_HERSHEY_DUPLEX, 1, (255,0,255), 1, cv2.LINE_AA)
+                                cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (255,0,255), 4)
+                                cv2.putText(bgr_image_ori, 'fear', (int(float(x+w/2-43)), y-10), cv2.FONT_HERSHEY_DUPLEX, 1, (255,0,255), 1, cv2.LINE_AA)
                             else:
-                                cv2.rectangle(image_cap_ori, (x, y), (x+w, y+h), (0,255,0), 4)
-                                cv2.putText(image_cap_ori, 'neutral', (int(float(x+w/2-43)), y-10), cv2.FONT_HERSHEY_DUPLEX, 1, (0,255,0), 1, cv2.LINE_AA)
+                                cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (0,255,0), 4)
+                                cv2.putText(bgr_image_ori, 'neutral', (int(float(x+w/2-43)), y-10), cv2.FONT_HERSHEY_DUPLEX, 1, (0,255,0), 1, cv2.LINE_AA)
                             
                         if not detect_emo:
                             color = np.asarray((0, 0, 0))
