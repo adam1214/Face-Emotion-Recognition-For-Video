@@ -1,4 +1,4 @@
-﻿file name,face_x,face_y,face_w,face_h,emotion,angry_prob,disgust_prob,fear_prob,happy_prob,sad_prob,surprise_prob,neutral_prob
+﻿time,frame,face_x,face_y,face_w,face_h,emotion,angry_prob,disgust_prob,fear_prob,happy_prob,sad_prob,surprise_prob,neutral_prob
 0.033,1,244.5,61.5,496.5,496.5,neutral,0.01365269,9.10797e-06,0.006458645,0.18073763,0.0234036,1.3122283e-05,0.7757251
 0.033,1,849.0,94.5,531.0,531.0,neutral,0.00094113103,3.1282838e-07,0.00026657953,0.0003094619,0.023606848,1.495429e-07,0.9748755
 0.067,2,241.5,64.5,496.5,496.5,neutral,0.0077678063,5.4251996e-06,0.0045622527,0.040665183,0.009234391,6.4553333e-06,0.9377585
