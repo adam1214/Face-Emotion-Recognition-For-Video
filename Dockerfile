@@ -66,6 +66,8 @@ RUN ln -s \
   /usr/local/lib/python3.7/site-packages/cv2.so
 
 RUN cd /media \
- && git clone https://Engineer:SPARKspark@biicgitlab.ee.nthu.edu.tw/prod/engineer/fer_offline.git
+ && git clone https://Engineer:SPARKspark@biicgitlab.ee.nthu.edu.tw/prod/engineer/fer_offline.git \
+ && cd fer_offline \
+ && git checkout googlenet
 
 WORKDIR /media/fer_offline
