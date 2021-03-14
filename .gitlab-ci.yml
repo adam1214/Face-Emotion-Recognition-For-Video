@@ -2,6 +2,8 @@ stages:
   - exe_env_build
   - test_env_build
   - test
+  - master_test
+  - googlenet_test
 
 exe_env_build:
   stage: exe_env_build
@@ -23,16 +25,34 @@ test_env_build:
     - pip install pytest-sugar
     - pip install pytest-icdiff
 
-
-test:
-  stage: test
+master_test:
+  stage: master_test
   tags:
     - "shell"
   script:
     - echo "pytest..."
     - py.test -vv --html=report.html --self-contained-html --durations=6
     - echo "Finish"
+  only:
+    - master
   artifacts:
     paths:
       - ./report.html
+      
+googlenet_test:
+  stage: googlenet_test
+  tags:
+    - "shell"
+  script:
+    - echo "switch to the branch googlenet"
+    - git checkout googlenet
+    - echo "pytest..."
+    - py.test -vv --html=report.html --self-contained-html --durations=6
+    - echo "Finish"
+  only:
+    - googlenet
+  artifacts:
+    paths:
+      - ./report.html
+
 
