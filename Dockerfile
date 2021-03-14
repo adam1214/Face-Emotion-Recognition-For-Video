@@ -24,14 +24,16 @@ RUN pip --no-cache-dir install \
     pandas \
     numpy \
     hdf5storage \
-    h5py \
-    pillow==6.1\
+    h5py==2.10.0 \
+    pillow==6.2 \
     scipy==1.2.1 \
     py3nvml \
     keras==2.3.1 \
     tensorflow==1.15.0 \
     statistics \
-    matplotlib
+    matplotlib \
+    torch \
+    torchvision
 
 WORKDIR /
 ENV OPENCV_VERSION="4.1.1"

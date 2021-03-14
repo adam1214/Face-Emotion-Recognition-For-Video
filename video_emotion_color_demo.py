@@ -17,8 +17,8 @@ import shutil
 import os
 import cv2
 import numpy as np
+import torch
 
-from keras.models import load_model
 from utils.datasets import get_labels
 from utils.inference import detect_faces
 from utils.inference import draw_text
@@ -26,6 +26,13 @@ from utils.inference import draw_bounding_box
 from utils.inference import apply_offsets
 from utils.inference import load_detection_model
 from utils.preprocessor import preprocess_input
+
+torch.backends.cudnn.deterministic = True
+torch.backends.cudnn.benchmark = False
+from models import googlenet as model
+from torchvision.transforms import transforms
+from PIL import Image
+import torch.nn.functional as F
 
 #Detecting face emotion on input video
 
@@ -39,6 +46,7 @@ def fun(in_path, out_video_path,
     .csv files will be saved in fer_result folder.
     only process the video that its resolution is 720p and above(video_resolution = 720, can be adjusted)
     """
+    global model, F
     detect_emo = True
 
     #save config
@@ -55,13 +63,21 @@ def fun(in_path, out_video_path,
     # parameters for loading data and images
     detection_model_path = model_path +  '/haarcascade_frontalface_default.xml'
     if detect_emo:
-        emotion_model_path = model_path + '/fer2013_mini_XCEPTION.102-0.66.hdf5'
+        emotion_model_path = model_path + '/googlenet__googlenetwei__2020Aug29_16.21'
         emotion_labels = get_labels('fer2013')
         emotion_offsets = (20, 40)
         # loading models
-        emotion_classifier = load_model(emotion_model_path, compile=False)
+        model = getattr(model, 'googlenet')
+        model = model(in_channels=3, num_classes=7)
+        #print(torch.cuda.is_available())
+        #print(torch.cuda.device_count())
+        state = torch.load(emotion_model_path, map_location='cpu')
+        model.load_state_dict(state['net'])
+
+        #model.cuda()
+        model.eval()
         # getting input model shapes for inference
-        emotion_target_size = emotion_classifier.input_shape[1:3]
+        emotion_target_size = (224,224)
         # starting lists for calculating modes
         emotion_window = []
 
@@ -72,7 +88,7 @@ def fun(in_path, out_video_path,
     # loading models
     face_detection = load_detection_model(detection_model_path)
 
-    info_name = ['time', 'frame', 'face_x', 'face_y', 'face_w', 'face_h', 'emotion']
+    info_name = ['time', 'frame', 'face_x', 'face_y', 'face_w', 'face_h', 'emotion', 'angry_prob', 'disgust_prob', 'fear_prob', 'happy_prob', 'sad_prob', 'surprise_prob', 'neutral_prob']
 
     input_video_root = in_path
     output_video_root = out_video_path
@@ -176,11 +192,16 @@ def fun(in_path, out_video_path,
                             except:
                                 continue
 
-                            gray_face = preprocess_input(gray_face, True)
-                            gray_face = np.expand_dims(gray_face, 0)
-                            gray_face = np.expand_dims(gray_face, -1)
+                            gray_face = np.dstack([gray_face] * 3)
+                            
+                            gray_face = transforms.Compose([ transforms.ToPILImage(),transforms.ToTensor(),])(np.uint8(gray_face))
+                            
+                            gray_face = torch.stack([gray_face], 0) 
+                            #gray_face = gray_face.cuda(non_blocking=True)
+                            outputs = model(gray_face).cpu()
+                            outputs = F.softmax(outputs, 1)
 
-                            emotion_prediction = emotion_classifier.predict(gray_face)
+                            emotion_prediction = torch.sum(outputs, 0).cpu().detach().numpy()  # outputs.shape [tta_size, 7]
                             emotion_probability = np.max(emotion_prediction)
                             emotion_label_arg = np.argmax(emotion_prediction)
                             emotion_text = emotion_labels[emotion_label_arg]
@@ -204,13 +225,19 @@ def fun(in_path, out_video_path,
                                 cv2.putText(bgr_image_ori, 'sad', (int(float(x+w/2-43)), y-10), cv2.FONT_HERSHEY_DUPLEX, 1, (0,0,255), 1, cv2.LINE_AA)
                             elif emotion_text == 'happy':
                                 cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (255,255,0), 4)
-                                cv2.putText(bgr_image_ori, 'happy', (int(float(x+w/2-43)), y-10), cv2.FONT_HERSHEY_DUPLEX, 1,(255,255,0), 1, cv2.LINE_AA)
+                                cv2.putText(bgr_image_ori, 'happy', (int(float(x+w/2-43)), y-10), cv2.FONT_HERSHEY_DUPLEX, 1, (255,255,0), 1, cv2.LINE_AA)
                             elif emotion_text == 'surprise':
                                 cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (0,255,255), 4)
-                                cv2.putText(bgr_image_ori, 'surprise', (int(float(x+w/2-43)), y-10), cv2.FONT_HERSHEY_DUPLEX, 1,(0,255,255), 1, cv2.LINE_AA)
+                                cv2.putText(bgr_image_ori, 'surprise', (int(float(x+w/2-43)), y-10), cv2.FONT_HERSHEY_DUPLEX, 1, (0,255,255), 1, cv2.LINE_AA)
+                            elif emotion_text == 'disgust':
+                                cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (0,0,0), 4)
+                                cv2.putText(bgr_image_ori, 'disgust', (int(float(x+w/2-43)), y-10), cv2.FONT_HERSHEY_DUPLEX, 1, (0,0,0), 1, cv2.LINE_AA)
+                            elif emotion_text == 'fear':
+                                cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (255,0,255), 4)
+                                cv2.putText(bgr_image_ori, 'fear', (int(float(x+w/2-43)), y-10), cv2.FONT_HERSHEY_DUPLEX, 1, (255,0,255), 1, cv2.LINE_AA)
                             else:
                                 cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (0,255,0), 4)
-                                cv2.putText(bgr_image_ori, 'neutral', (int(float(x+w/2-43)), y-10), cv2.FONT_HERSHEY_DUPLEX, 1,(0,255,0), 1, cv2.LINE_AA)
+                                cv2.putText(bgr_image_ori, 'neutral', (int(float(x+w/2-43)), y-10), cv2.FONT_HERSHEY_DUPLEX, 1, (0,255,0), 1, cv2.LINE_AA)
                             
                         if not detect_emo:
                             color = np.asarray((0, 0, 0))
@@ -226,6 +253,8 @@ def fun(in_path, out_video_path,
                                 op_info_list[i] = str(op_info_list[i])
                             if detect_emo:
                                 op_info_list.append(emotion_text)
+                                for prob in emotion_prediction:
+                                    op_info_list.append(prob)
                             csv_writer.writerow(op_info_list)
 
                     #bgr_image = cv2.cvtColor(rgb_image, cv2.COLOR_RGB2BGR)
