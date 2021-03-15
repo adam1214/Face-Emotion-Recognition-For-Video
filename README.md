@@ -1,6 +1,6 @@
 # FER Offline
 > **Engineer Team**  
-> last update: 2020.09.28    
+> last update: 2021.03.15    
 > 
 > @ author: Chun-Yu Chen  
 > @ email: adam@gapp.nthu.edu.tw  
@@ -20,7 +20,7 @@
 
 ### Mode1 > Assign Folder 
 
-1. Go to the path where you clone the repository, run `cd  <your_path>`
+1. Go to the path where you clone the repository, run `cd <your_path>`
 
 2. Put your files in `fer_input/<your_folder>/` 
   
@@ -30,7 +30,7 @@
    * if your OS is UBUNTU, `bash docker_run.sh  <your_folder>`   
    * if your OS is WINDOWS, `docker_run.bat  <your_folder>`
 
-4. Check result in the `fer_output` and `fer_result` folder 
+4. Check result in the `fer_result` folder 
 5. The original files and folder will be moved to 
 	
 	`fer_finished/<your_folder>/*.mp4`  
@@ -47,15 +47,14 @@
 	* if your OS is UBUNTU, run `bash docker_run.sh`
 	* if your OS is WINDOWS, run `docker_run.bat` 
 
-4. Check result in the `fer_output` and `fer_result` folder 
+4. Check result in the `fer_result` folder 
 5. The original files and folder will be moved to `fer_finished/*`
 
 ## Input Data Requirement
-1. Only process .mp4 files which are 720p and above.
+1. Only process .mp4 files.
 
 ## Output Format
-2. There are `.csv` files in the `fer_result` folder. And each colume in the `.csv` file is:
-    (If the resolution of the input `.mp4` file isn't 720p and above, `.csv` file will only be printed error msg.)
+1. `.csv` files. And each colume in the `.csv` file is:
     * time
     * frame
     * face_x
@@ -63,5 +62,8 @@
     * face_w
     * face_h
     * emotion
-3. There are `.mp4` files in the `fer_output` folder. They show the recognized face frame and the current emotion of the face.
-4. After the `.mp4` file in the `fer_input` folder is processed, it will be moved to `fer_finished` folder.
+
+    ![](https://i.imgur.com/lvjzuci.png)
+2. `.mp4` files showing the recognized face frame and the current emotion of the face.
+3. `.csv` files & `.mp4` files would be compressed as a `.zip` file.
+4. `.zip` file can be named by passing parameter when executing `video_emotion_color_demo.py`, if you don't pass parameter, `.zip` file would be named with the current time stamp.
