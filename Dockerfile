@@ -63,7 +63,7 @@ RUN ln -s \
   /usr/local/python/cv2/python-3.7/cv2.cpython-37m-x86_64-linux-gnu.so \
   /usr/local/lib/python3.7/site-packages/cv2.so
 
-RUN cd /media \
- && git clone https://Engineer:SPARKspark@biicgitlab.ee.nthu.edu.tw/prod/engineer/fer_offline.git
+#RUN cd /media \
+# && git clone https://Engineer:SPARKspark@biicgitlab.ee.nthu.edu.tw/prod/engineer/fer_offline.git
 
-WORKDIR /media/fer_offline
+#WORKDIR /media/fer_offline
