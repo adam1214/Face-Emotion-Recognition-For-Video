@@ -5,14 +5,18 @@ Created on Thu Sep 24 15:47:42 2020
 @author: Chun-Yu Chen
 """
 
-import subprocess as sp
 from distutils.dir_util import copy_tree
+from os.path import join
+from os import listdir
+
+import subprocess as sp
 import platform
 import pandas as pd
 import pytest
 import os
 import shutil
 import sys
+import zipfile
 
 def copytree(src, dst, symlinks=False, ignore=None):
     if not os.path.exists(dst):
@@ -60,10 +64,9 @@ def set_up():
 
     print("\n Teardown...")
     if platform.system() == 'Windows':
-        remove_subdirectory('feri_input')
-        remove_subdirectory('feri_finished')
-        remove_subdirectory('feri_result')
-        remove_subdirectory('feri_output')
+        remove_subdirectory('fer_input')
+        remove_subdirectory('fer_finished')
+        remove_subdirectory('fer_result')
     else:
         subprocess_cmd('bash tear_down_linux.sh')
 
@@ -74,6 +77,16 @@ def test_mode_1(set_up):
         subprocess_cmd('docker_run.bat folder1')
     else:
         subprocess_cmd('sudo bash docker_run.sh folder1')
+    
+    result_path = "fer_result/"
+    files = listdir(result_path)
+
+    for f in files:
+        fullpath = join(result_path, f)
+        #print(fullpath)
+        if '.zip' in fullpath:
+            zf = zipfile.ZipFile(fullpath, 'r')
+            zf.extractall(result_path)
 
     for root, dirs, files in os.walk('fer_verification/result/folder1'): 
         for file_ in files:
@@ -90,6 +103,16 @@ def test_mode_2(set_up):
     else:
         subprocess_cmd('sudo bash docker_run.sh')
     
+    result_path = "fer_result/"
+    files = listdir(result_path)
+
+    for f in files:
+        fullpath = join(result_path, f)
+        #print(fullpath)
+        if '.zip' in fullpath:
+            zf = zipfile.ZipFile(fullpath, 'r')
+            zf.extractall(result_path)
+
     bools = [False for i in range(n_uids)]
     print(bools)
     j = 0

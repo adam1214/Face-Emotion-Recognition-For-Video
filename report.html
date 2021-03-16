@@ -405,7 +405,7 @@ function filter_table(elem) {
 }
 </script>
     <h1>report.html</h1>
-    <p>Report generated on 28-Sep-2020 at 17:44:17 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v1.22.1</p>
+    <p>Report generated on 16-Mar-2021 at 20:08:02 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v1.22.1</p>
     <h2>Environment</h2>
     <table id="environment">
       <tr>
@@ -413,7 +413,7 @@ function filter_table(elem) {
         <td>{&apos;py&apos;: &apos;1.9.0&apos;, &apos;pytest&apos;: &apos;4.6.11&apos;, &apos;pluggy&apos;: &apos;0.13.1&apos;}</td></tr>
       <tr>
         <td>Platform</td>
-        <td>Linux-5.4.0-48-generic-x86_64-with-Ubuntu-18.04-bionic</td></tr>
+        <td>Linux-5.4.0-67-generic-x86_64-with-Ubuntu-18.04-bionic</td></tr>
       <tr>
         <td>Plugins</td>
         <td>{u&apos;metadata&apos;: u&apos;1.10.0&apos;, u&apos;html&apos;: u&apos;1.22.1&apos;, u&apos;sugar&apos;: u&apos;0.9.4&apos;}</td></tr>
@@ -421,8 +421,8 @@ function filter_table(elem) {
         <td>Python</td>
         <td>2.7.17</td></tr></table>
     <h2>Summary</h2>
-    <p>2 tests ran in 55.45 seconds. </p>
-    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="passed">2 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="failed">0 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
+    <p>2 tests ran in 62.79 seconds. </p>
+    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="passed">0 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="failed">2 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filter_table(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
     <h2>Results</h2>
     <table id="results-table">
       <thead id="results-table-head">
@@ -433,17 +433,113 @@ function filter_table(elem) {
           <th>Links</th></tr>
         <tr hidden="true" id="not-found-message">
           <th colspan="4">No results found. Try to check the filters</th></tr></thead>
-      <tbody class="passed results-table-row">
+      <tbody class="failed results-table-row">
         <tr>
-          <td class="col-result">Passed</td>
+          <td class="col-result">Failed</td>
           <td class="col-name">test_a_docker.py::test_mode_1</td>
-          <td class="col-duration">20.71</td>
+          <td class="col-duration">29.66</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">----------------------------- Captured stdout call -----------------------------<br/>Arguments supplied
+            <div class="log">set_up = 3<br/><br/>    def test_mode_1(set_up):<br/>        # Run the specific folder: mode 1<br/>        if platform.system() == 'Windows':<br/>            subprocess_cmd('docker_run.bat folder1')<br/>        else:<br/>            subprocess_cmd('sudo bash docker_run.sh folder1')<br/>    <br/>        result_path = "fer_result/"<br/>        files = listdir(result_path)<br/>    <br/>        for f in files:<br/>            fullpath = join(result_path, f)<br/>            #print(fullpath)<br/>            if '.zip' in fullpath:<br/>                zf = zipfile.ZipFile(fullpath, 'r')<br/>                zf.extractall(result_path)<br/>    <br/>        for root, dirs, files in os.walk('fer_verification/result/folder1'):<br/>            for file_ in files:<br/>                veri_df = pd.read_csv('fer_verification/result/folder1/' + file_)<br/>                test_df = pd.read_csv('fer_result/folder1/' + file_)<br/>                print('fer_result/folder1/' + file_)<br/>                print(veri_df.equals(test_df))<br/>&gt;               assert veri_df.equals(test_df) == True<br/><span class="error">E               assert False == True</span><br/><span class="error">E                 -False</span><br/><span class="error">E                 +True</span><br/><br/>test_a_docker.py:97: AssertionError<br/>----------------------------- Captured stdout call -----------------------------<br/>Arguments supplied
 
 fer_input/folder1/test.mp4
+
+Processing frame: 0 ......
+
+Processing frame: 10 ......
+
+Processing frame: 20 ......
+
+Processing frame: 30 ......
+
+Processing frame: 40 ......
+
+Processing frame: 50 ......
+
+Processing frame: 60 ......
+
+Processing frame: 70 ......
+
+Processing frame: 80 ......
+
+Processing frame: 90 ......
+
+Processing frame: 100 ......
+
+Processing frame: 110 ......
+
+Processing frame: 120 ......
+
+Processing frame: 130 ......
+
+Processing frame: 140 ......
+
+Processing frame: 150 ......
+
+Processing frame: 160 ......
+
+Processing frame: 170 ......
+
+Processing frame: 180 ......
+
+Processing frame: 190 ......
+
+Processing frame: 200 ......
+
+Processing frame: 210 ......
+
+Processing frame: 220 ......
+
+Processing frame: 230 ......
+
+Processing frame: 240 ......
+
+Processing frame: 250 ......
+
+Processing frame: 260 ......
+
+Processing frame: 270 ......
+
+Processing frame: 280 ......
+
+Processing frame: 290 ......
+
+Processing frame: 300 ......
+
+Processing frame: 310 ......
+
+Processing frame: 320 ......
+
+Processing frame: 330 ......
+
+Processing frame: 340 ......
+
+Processing frame: 350 ......
+
+Processing frame: 360 ......
+
+Processing frame: 370 ......
+
+Processing frame: 380 ......
+
+Processing frame: 390 ......
+
+Processing frame: 400 ......
+
+Processing frame: 410 ......
+
+Processing frame: 420 ......
+
+Processing frame: 430 ......
+
+Processing frame: 440 ......
+
+Processing frame: 450 ......
+
+Processing frame: 460 ......
+
+fer_input/folder1/test.mp4 DONE!!	Spend Time: 10.409632682800293(s)
 
 fer_input/folder1/Test_2_subject.mp4
 
@@ -491,54 +587,56 @@ Processing frame: 200 ......
 
 Processing frame: 210 ......
 
-fer_input/folder1/resize_to_720p_Test_2_subject.mp4 DONE!!	Spend Time: 12.00056505203247(s)
+fer_input/folder1/resize_to_720p_Test_2_subject.mp4 DONE!!	Spend Time: 11.657583713531494(s)
 
 input file path: fer_input/folder1
 
-output video file path: fer_output/folder1
-
-output info file path: fer_result/folder1
+output video &amp; info file path: fer_result/folder1
 
 input finished path: fer_finished/folder1
 
 model path: fer_model/
 
-only process the video that its resolution is 720p and above
+Input video would be resized to 720p to process. If input video resolution is less than 720p, it would be processed according to its original resolution.
+
+Compressed file name: compress.zip
 
 
 fer_result/folder1/test_info.csv
 True
 fer_result/folder1/Test_2_subject_info.csv
-True
+False
 <br/>----------------------------- Captured stderr call -----------------------------<br/>Using TensorFlow backend.
 WARNING:tensorflow:From /usr/local/lib/python3.7/site-packages/tensorflow_core/python/ops/resource_variable_ops.py:1630: calling BaseResourceVariable.__init__ (from tensorflow.python.ops.resource_variable_ops) with constraint is deprecated and will be removed in a future version.
 Instructions for updating:
 If using Keras pass *_constraint arguments to layers.
-2020-09-28 09:43:26.030703: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcuda.so.1'; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/local/lib/python3.7/site-packages/cv2/../../../../lib:
-2020-09-28 09:43:26.030765: E tensorflow/stream_executor/cuda/cuda_driver.cc:318] failed call to cuInit: UNKNOWN ERROR (303)
-2020-09-28 09:43:26.030801: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (c370fe54f21f): /proc/driver/nvidia/version does not exist
-2020-09-28 09:43:26.031257: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
-2020-09-28 09:43:26.039544: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2894560000 Hz
-2020-09-28 09:43:26.040186: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x558bdbb13c90 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
-2020-09-28 09:43:26.040289: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+2021-03-16 12:07:02.412238: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcuda.so.1'; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/local/lib/python3.7/site-packages/cv2/../../../../lib:
+2021-03-16 12:07:02.412292: E tensorflow/stream_executor/cuda/cuda_driver.cc:318] failed call to cuInit: UNKNOWN ERROR (303)
+2021-03-16 12:07:02.412325: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (54ac2eff4e48): /proc/driver/nvidia/version does not exist
+2021-03-16 12:07:02.412603: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2021-03-16 12:07:02.420137: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2894560000 Hz
+2021-03-16 12:07:02.421220: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55deeb539190 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+2021-03-16 12:07:02.421282: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
 WARNING:tensorflow:From /usr/local/lib/python3.7/site-packages/keras/backend/tensorflow_backend.py:4070: The name tf.nn.max_pool is deprecated. Please use tf.nn.max_pool2d instead.
 
 OpenCV: FFMPEG: tag 0x5634504d/'MP4V' is not supported with codec id 12 and format 'mp4 / MP4 (MPEG-4 Part 14)'
 OpenCV: FFMPEG: fallback to use tag 0x7634706d/'mp4v'
-OpenCV: FFMPEG: tag 0x5634504d/'MP4V' is not supported with codec id 12 and format 'mp4 / MP4 (MPEG-4 Part 14)'
-OpenCV: FFMPEG: fallback to use tag 0x7634706d/'mp4v'
 WARNING:tensorflow:From /usr/local/lib/python3.7/site-packages/keras/backend/tensorflow_backend.py:422: The name tf.global_variables is deprecated. Please use tf.compat.v1.global_variables instead.
 
+OpenCV: FFMPEG: tag 0x5634504d/'MP4V' is not supported with codec id 12 and format 'mp4 / MP4 (MPEG-4 Part 14)'
+OpenCV: FFMPEG: fallback to use tag 0x7634706d/'mp4v'
+OpenCV: FFMPEG: tag 0x5634504d/'MP4V' is not supported with codec id 12 and format 'mp4 / MP4 (MPEG-4 Part 14)'
+OpenCV: FFMPEG: fallback to use tag 0x7634706d/'mp4v'
 <br/></div></td></tr></tbody>
-      <tbody class="passed results-table-row">
+      <tbody class="failed results-table-row">
         <tr>
-          <td class="col-result">Passed</td>
+          <td class="col-result">Failed</td>
           <td class="col-name">test_a_docker.py::test_mode_2</td>
-          <td class="col-duration">34.39</td>
+          <td class="col-duration">32.77</td>
           <td class="col-links"></td></tr>
         <tr>
           <td class="extra" colspan="4">
-            <div class="log">----------------------------- Captured stdout call -----------------------------<br/>NO arguments supplied
+            <div class="log">set_up = 3<br/><br/>    def test_mode_2(set_up):<br/>        n_uids = set_up<br/>        if platform.system() == 'Windows':<br/>            subprocess_cmd('docker_run.bat')<br/>        else:<br/>            subprocess_cmd('sudo bash docker_run.sh')<br/>    <br/>        result_path = "fer_result/"<br/>        files = listdir(result_path)<br/>    <br/>        for f in files:<br/>            fullpath = join(result_path, f)<br/>            #print(fullpath)<br/>            if '.zip' in fullpath:<br/>                zf = zipfile.ZipFile(fullpath, 'r')<br/>                zf.extractall(result_path)<br/>    <br/>        bools = [False for i in range(n_uids)]<br/>        print(bools)<br/>        j = 0<br/>        for root, dirs, files in os.walk('fer_verification/result/'):<br/>            for file_ in files:<br/>                test_path = os.path.join(root, file_)[23:]<br/>                test_path = "fer_result" + test_path<br/>                veri_df = pd.read_csv(os.path.join(root, file_))<br/>                test_df = pd.read_csv(test_path)<br/>                bools[j] = veri_df.equals(test_df)<br/>                print(test_path)<br/>                print(veri_df.equals(test_df))<br/>                j = j+1<br/>    <br/>&gt;       assert all(x == True for x in bools) == True<br/><span class="error">E       assert False == True</span><br/><span class="error">E         -False</span><br/><span class="error">E         +True</span><br/><br/>test_a_docker.py:130: AssertionError<br/>----------------------------- Captured stdout call -----------------------------<br/>NO arguments supplied
 
 fer_input/folder2/720p.mp4
 
@@ -692,19 +790,19 @@ Processing frame: 730 ......
 
 Processing frame: 740 ......
 
-fer_input/folder2/720p.mp4 DONE!!	Spend Time: 28.605632781982422(s)
+fer_input/folder2/720p.mp4 DONE!!	Spend Time: 27.62876009941101(s)
 
 input file path: fer_input/
 
-output video file path: fer_output/
-
-output info file path: fer_result/
+output video &amp; info file path: fer_result/
 
 input finished path: fer_finished/
 
 model path: fer_model/
 
-only process the video that its resolution is 720p and above
+Input video would be resized to 720p to process. If input video resolution is less than 720p, it would be processed according to its original resolution.
+
+Compressed file name: compress.zip
 
 
 [False, False, False]
@@ -713,18 +811,18 @@ True
 fer_result/folder1/test_info.csv
 True
 fer_result/folder1/Test_2_subject_info.csv
-True
+False
 <br/>----------------------------- Captured stderr call -----------------------------<br/>Using TensorFlow backend.
 WARNING:tensorflow:From /usr/local/lib/python3.7/site-packages/tensorflow_core/python/ops/resource_variable_ops.py:1630: calling BaseResourceVariable.__init__ (from tensorflow.python.ops.resource_variable_ops) with constraint is deprecated and will be removed in a future version.
 Instructions for updating:
 If using Keras pass *_constraint arguments to layers.
-2020-09-28 09:43:46.263191: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcuda.so.1'; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/local/lib/python3.7/site-packages/cv2/../../../../lib:
-2020-09-28 09:43:46.263285: E tensorflow/stream_executor/cuda/cuda_driver.cc:318] failed call to cuInit: UNKNOWN ERROR (303)
-2020-09-28 09:43:46.263324: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (47ea5625a42f): /proc/driver/nvidia/version does not exist
-2020-09-28 09:43:46.263666: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
-2020-09-28 09:43:46.270053: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2894560000 Hz
-2020-09-28 09:43:46.270799: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55a318839bf0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
-2020-09-28 09:43:46.270867: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+2021-03-16 12:07:32.106638: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcuda.so.1'; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory; LD_LIBRARY_PATH: /usr/local/lib/python3.7/site-packages/cv2/../../../../lib:
+2021-03-16 12:07:32.106697: E tensorflow/stream_executor/cuda/cuda_driver.cc:318] failed call to cuInit: UNKNOWN ERROR (303)
+2021-03-16 12:07:32.106727: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (90a304e2f004): /proc/driver/nvidia/version does not exist
+2021-03-16 12:07:32.106974: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2021-03-16 12:07:32.114900: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2894560000 Hz
+2021-03-16 12:07:32.115668: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55f4eb620ec0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+2021-03-16 12:07:32.115731: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
 WARNING:tensorflow:From /usr/local/lib/python3.7/site-packages/keras/backend/tensorflow_backend.py:4070: The name tf.nn.max_pool is deprecated. Please use tf.nn.max_pool2d instead.
 
 OpenCV: FFMPEG: tag 0x5634504d/'MP4V' is not supported with codec id 12 and format 'mp4 / MP4 (MPEG-4 Part 14)'

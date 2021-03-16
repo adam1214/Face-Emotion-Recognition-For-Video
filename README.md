@@ -52,6 +52,7 @@
 
 ## Input Data Requirement
 1. Only process .mp4 files.
+2. Input video would be resized to 720p to process.  If input video resolution is less than 720p, it would be processed according to its original resolution.
 
 ## Output Format
 1. `.csv` files. And each colume in the `.csv` file is:

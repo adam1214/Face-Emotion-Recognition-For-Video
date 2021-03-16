@@ -17,7 +17,9 @@ import shutil
 import os
 import cv2
 import numpy as np
+import zipfile
 
+from os.path import join
 from keras.models import load_model
 from utils.datasets import get_labels
 from utils.inference import detect_faces
@@ -29,15 +31,13 @@ from utils.preprocessor import preprocess_input
 
 #Detecting face emotion on input video
 
-def fun(in_path, out_video_path,
-        out_info_path, in_finished_path,
-        model_path, video_resolution):
+def fun(in_path, out_info_path, in_finished_path, model_path, video_resolution, zip_name):
     """
-     >>>  fun(/fer_input, /fer_output, /fer_result, /fer_finished, /fer_model, video_resolution)
+     >>>  fun(/fer_input, /fer_result, /fer_finished, /fer_model, video_resolution, zip_name)
     .mp4 files in the fer_intput folder will move to fer_finished folder.
     Processed .mp4 files will be saved in fer_output folder.
     .csv files will be saved in fer_result folder.
-    only process the video that its resolution is 720p and above(video_resolution = 720, can be adjusted)
+    Input video would be resized to 720p to process.  If input video resolution is less than 720p, it would be processed according to its original resolution.
     """
     detect_emo = True
 
@@ -75,7 +75,6 @@ def fun(in_path, out_video_path,
     info_name = ['time', 'frame', 'face_x', 'face_y', 'face_w', 'face_h', 'emotion']
 
     input_video_root = in_path
-    output_video_root = out_video_path
     output_info_root = out_info_path
     for video_path in glob.glob(input_video_root+'/**/*.mp4', recursive=True):
         print(video_path)
@@ -128,10 +127,10 @@ def fun(in_path, out_video_path,
             fps = round(video_capture.get(cv2.CAP_PROP_FPS))
             size = (round(video_capture.get(3)), round(video_capture.get(4))) # float
 
-        if size[0] == 1280 and size[1] == 720:
+        if True:
             if save_video:
-                os.makedirs(os.path.dirname(output_video_root + no_root_path), exist_ok=True)
-                out_path = output_video_root+no_root_path+ori_video_name
+                os.makedirs(os.path.dirname(output_info_root + no_root_path), exist_ok=True)
+                out_path = output_info_root+no_root_path+ori_video_name
                 fourcc = cv2.VideoWriter_fourcc(*'MP4V')
                 out = cv2.VideoWriter(out_path, fourcc, fps, ori_size)
             if save_info:
@@ -268,3 +267,14 @@ def fun(in_path, out_video_path,
             os.rename(output_info_root+no_root_path+video_name+'_info.csv', output_info_root+no_root_path+video_ori_name+'_info.csv')
 
     shutil.rmtree(input_video_root, ignore_errors=True)
+
+    with zipfile.ZipFile('fer_result/' + zip_name, 'w') as zf:
+        for root, dirs, files in os.walk('fer_result/'):
+            for file_name in files:
+                if '.zip' not in file_name and '.gitkeep' not in file_name:
+                    fullpath = join(root, file_name)
+                    #print(fullpath)
+                    zf.write(fullpath, fullpath[len('fer_result/'):])
+                    #os.remove(fullpath)
+            if root != 'fer_result/':
+                shutil.rmtree(root)
