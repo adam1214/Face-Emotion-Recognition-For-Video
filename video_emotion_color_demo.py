@@ -275,6 +275,6 @@ def fun(in_path, out_info_path, in_finished_path, model_path, video_resolution, 
                     fullpath = join(root, file_name)
                     #print(fullpath)
                     zf.write(fullpath, fullpath[len('fer_result/'):])
-                    #os.remove(fullpath)
+                    os.remove(fullpath)
             if root != 'fer_result/':
                 shutil.rmtree(root)
