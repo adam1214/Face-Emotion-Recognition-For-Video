@@ -81,7 +81,7 @@ def fun(in_path, out_info_path, in_finished_path, model_path, video_resolution, 
         print(video_path)
         no_root_path = video_path[len(input_video_root):].replace(video_path.split('/')[-1], '')
         video_capture = cv2.VideoCapture(video_path)
-        video_cap_ori = video_capture
+        video_cap_ori = cv2.VideoCapture(video_path)
         video_name = video_path.split('/')[-1].split('.mp4')[0]
         ori_video_name = video_path.split('/')[-1]
 
@@ -92,7 +92,8 @@ def fun(in_path, out_info_path, in_finished_path, model_path, video_resolution, 
         reduce_resolution = 0
         scaling_factor_x = 1
         scaling_factor_y = 1
-        if video_resolution == "720p" and size[0] > 1280 and size[1] > 720:
+
+        if video_resolution == "720p" and (size[0] > 1280 or size[1] > 720):
             #need to reduce resolution to 720p
             reduce_resolution = 1
             out_path = input_video_root + no_root_path+'resize_to_720p_'+video_path.split('/')[-1]
@@ -151,13 +152,13 @@ def fun(in_path, out_info_path, in_finished_path, model_path, video_resolution, 
                 video_flag_ori, bgr_image_ori = video_cap_ori.read() #ori image
                 video_flag, bgr_image = video_capture.read() #downscale image
 
-                if video_flag_ori:
+                if video_flag:
                     frame_idx += 1
                     gray_image = cv2.cvtColor(bgr_image, cv2.COLOR_BGR2GRAY)
                     #rgb_image = cv2.cvtColor(bgr_image, cv2.COLOR_BGR2RGB)
 
-                    gray_image_ori = cv2.cvtColor(bgr_image_ori, cv2.COLOR_BGR2GRAY)
-                    rgb_image_ori = cv2.cvtColor(bgr_image_ori, cv2.COLOR_BGR2RGB)
+                    #gray_image_ori = cv2.cvtColor(bgr_image_ori, cv2.COLOR_BGR2GRAY)
+                    #rgb_image_ori = cv2.cvtColor(bgr_image_ori, cv2.COLOR_BGR2RGB)
 
                     faces = detect_faces(face_detection, gray_image)
                     if not isinstance(faces, tuple):
@@ -267,8 +268,8 @@ def fun(in_path, out_info_path, in_finished_path, model_path, video_resolution, 
             os.remove(dst)
             os.rename(output_info_root+no_root_path+video_name+'_info.csv', output_info_root+no_root_path+video_ori_name+'_info.csv')
 
-    shutil.rmtree(input_image_root, ignore_errors=True)
-    if input_image_root == 'fer_input/':
+    shutil.rmtree(input_video_root, ignore_errors=True)
+    if input_video_root == 'fer_input/':
         os.makedirs('fer_input/', stat.S_IRWXO + stat.S_IRWXG + stat.S_IRWXU)
 
     with zipfile.ZipFile('fer_result/' + zip_name, 'w') as zf:
