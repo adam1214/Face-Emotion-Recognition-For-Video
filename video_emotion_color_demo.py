@@ -15,6 +15,7 @@ import csv
 import codecs
 import shutil
 import os
+import stat
 import cv2
 import numpy as np
 import zipfile
@@ -266,7 +267,9 @@ def fun(in_path, out_info_path, in_finished_path, model_path, video_resolution, 
             os.remove(dst)
             os.rename(output_info_root+no_root_path+video_name+'_info.csv', output_info_root+no_root_path+video_ori_name+'_info.csv')
 
-    shutil.rmtree(input_video_root, ignore_errors=True)
+    shutil.rmtree(input_image_root, ignore_errors=True)
+    if input_image_root == 'fer_input/':
+        os.makedirs('fer_input/', stat.S_IRWXO + stat.S_IRWXG + stat.S_IRWXU)
 
     with zipfile.ZipFile('fer_result/' + zip_name, 'w') as zf:
         for root, dirs, files in os.walk('fer_result/'):
