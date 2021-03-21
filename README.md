@@ -1,6 +1,6 @@
 # FER Offline
 > **Engineer Team**  
-> last update: 2021.03.15    
+> last update: 2021.03.21    
 > 
 > @ author: Chun-Yu Chen  
 > @ email: adam@gapp.nthu.edu.tw  
@@ -58,6 +58,7 @@
 1. `.csv` files. And each colume in the `.csv` file is:
     * time
     * frame
+    * face_idx
     * face_x
     * face_y
     * face_w

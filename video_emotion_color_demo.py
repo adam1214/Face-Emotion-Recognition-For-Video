@@ -73,7 +73,7 @@ def fun(in_path, out_info_path, in_finished_path, model_path, video_resolution, 
     # loading models
     face_detection = load_detection_model(detection_model_path)
 
-    info_name = ['time', 'frame', 'face_x', 'face_y', 'face_w', 'face_h', 'emotion']
+    info_name = ['time', 'frame', 'face_idx', 'face_x', 'face_y', 'face_w', 'face_h', 'emotion']
 
     input_video_root = in_path
     output_info_root = out_info_path
@@ -163,10 +163,8 @@ def fun(in_path, out_info_path, in_finished_path, model_path, video_resolution, 
                     faces = detect_faces(face_detection, gray_image)
                     if not isinstance(faces, tuple):
                         faces = faces[faces[:,0].argsort()]
-                        faces = faces[faces[:,1].argsort()]
-                        faces = faces[faces[:,2].argsort()]
-                        faces = faces[faces[:,3].argsort()]
-
+                    
+                    face_idx = 1
                     for face_coordinates in faces:
                         x_1, x_2, y_1, y_2 = apply_offsets(face_coordinates, emotion_offsets)
 
@@ -198,20 +196,75 @@ def fun(in_path, out_info_path, in_finished_path, model_path, video_resolution, 
                             w = int(float(face_coordinates[2]*scaling_factor_x))
                             h = int(float(face_coordinates[3]*scaling_factor_y))
                             if emotion_text == 'angry':
+                                # setup text
+                                font = cv2.FONT_HERSHEY_TRIPLEX
+                                text = str(face_idx).zfill(2)+'-angry'
+
+                                # get boundary of this text
+                                textsize = cv2.getTextSize(text, font, 1, 2)[0]
+
+                                # get coords based on boundary
+                                textX = (w - textsize[0]) / 2 + x
+                                textY = y - 12
+
                                 cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (255,0,0), 4)
-                                cv2.putText(bgr_image_ori, 'angry', (int(float(x+w/2-43)), y-10), cv2.FONT_HERSHEY_DUPLEX, 1, (255, 0, 0), 1, cv2.LINE_AA)
+                                cv2.putText(bgr_image_ori, text, (int(textX), int(textY)), font, 1.5, (255, 0, 0), 1, cv2.LINE_AA)
                             elif emotion_text == 'sad':
+                                # setup text
+                                font = cv2.FONT_HERSHEY_TRIPLEX
+                                text = str(face_idx).zfill(2)+'-sad'
+
+                                # get boundary of this text
+                                textsize = cv2.getTextSize(text, font, 1, 2)[0]
+
+                                # get coords based on boundary
+                                textX = (w - textsize[0]) / 2 + x
+                                textY = y - 12
+
                                 cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (0,0,255), 4)
-                                cv2.putText(bgr_image_ori, 'sad', (int(float(x+w/2-43)), y-10), cv2.FONT_HERSHEY_DUPLEX, 1, (0,0,255), 1, cv2.LINE_AA)
+                                cv2.putText(bgr_image_ori, text, (int(textX), int(textY)), font, 1.5, (0,0,255), 1, cv2.LINE_AA)
                             elif emotion_text == 'happy':
+                                # setup text
+                                font = cv2.FONT_HERSHEY_TRIPLEX
+                                text = str(face_idx).zfill(2)+'-happy'
+
+                                # get boundary of this text
+                                textsize = cv2.getTextSize(text, font, 1, 2)[0]
+
+                                # get coords based on boundary
+                                textX = (w - textsize[0]) / 2 + x
+                                textY = y - 12
+
                                 cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (255,255,0), 4)
-                                cv2.putText(bgr_image_ori, 'happy', (int(float(x+w/2-43)), y-10), cv2.FONT_HERSHEY_DUPLEX, 1,(255,255,0), 1, cv2.LINE_AA)
+                                cv2.putText(bgr_image_ori, text, (int(textX), int(textY)), font, 1.5, (255,255,0), 1, cv2.LINE_AA)
                             elif emotion_text == 'surprise':
+                                # setup text
+                                font = cv2.FONT_HERSHEY_TRIPLEX
+                                text = str(face_idx).zfill(2)+'-surprise'
+
+                                # get boundary of this text
+                                textsize = cv2.getTextSize(text, font, 1, 2)[0]
+
+                                # get coords based on boundary
+                                textX = (w - textsize[0]) / 2 + x
+                                textY = y - 12
+
                                 cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (0,255,255), 4)
-                                cv2.putText(bgr_image_ori, 'surprise', (int(float(x+w/2-43)), y-10), cv2.FONT_HERSHEY_DUPLEX, 1,(0,255,255), 1, cv2.LINE_AA)
+                                cv2.putText(bgr_image_ori, text, (int(textX), int(textY)), font, 1.5, (0,255,255), 1, cv2.LINE_AA)
                             else:
+                                # setup text
+                                font = cv2.FONT_HERSHEY_TRIPLEX
+                                text = str(face_idx).zfill(2)+'-neutral'
+
+                                # get boundary of this text
+                                textsize = cv2.getTextSize(text, font, 1, 2)[0]
+
+                                # get coords based on boundary
+                                textX = (w - textsize[0]) / 2 + x
+                                textY = y - 12
+
                                 cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (0,255,0), 4)
-                                cv2.putText(bgr_image_ori, 'neutral', (int(float(x+w/2-43)), y-10), cv2.FONT_HERSHEY_DUPLEX, 1,(0,255,0), 1, cv2.LINE_AA)
+                                cv2.putText(bgr_image_ori, text, (int(textX), int(textY)), font, 1.5, (0,255,0), 1, cv2.LINE_AA)
                             
                         if not detect_emo:
                             color = np.asarray((0, 0, 0))
@@ -220,7 +273,7 @@ def fun(in_path, out_info_path, in_finished_path, model_path, video_resolution, 
                             draw_bounding_box(face_coordinates, rgb_image, color)
 
                         if save_info:
-                            op_info_list = [round(frame_idx/fps_float, 3), frame_idx,
+                            op_info_list = [round(frame_idx/fps_float, 3), frame_idx, str(face_idx).zfill(2),
                                             face_coordinates[0]*scaling_factor_x, face_coordinates[1]*scaling_factor_y,
                                             face_coordinates[2]*scaling_factor_x, face_coordinates[3]*scaling_factor_y]
                             for i in range(len(op_info_list)):
@@ -228,6 +281,7 @@ def fun(in_path, out_info_path, in_finished_path, model_path, video_resolution, 
                             if detect_emo:
                                 op_info_list.append(emotion_text)
                             csv_writer.writerow(op_info_list)
+                        face_idx += 1
 
                     #bgr_image = cv2.cvtColor(rgb_image, cv2.COLOR_RGB2BGR)
 
