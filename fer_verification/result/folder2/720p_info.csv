@@ -1,9 +1,9 @@
-time,frame,face_idx,face_x,face_y,face_w,face_h,emotion
+﻿time,frame,face_idx,face_x,face_y,face_w,face_h,emotion
 0.04,1,01,467,213,410,410,neutral
 0.08,2,01,471,220,393,393,neutral
 0.12,3,01,454,215,397,397,neutral
 0.16,4,01,466,212,378,378,neutral
-0.2,5,01,413,159,378,378,neutral
+0.2,5,01,457,214,364,364,neutral
 0.24,6,01,446,198,380,380,neutral
 0.28,7,01,442,189,372,372,neutral
 0.32,8,01,446,196,350,350,neutral
