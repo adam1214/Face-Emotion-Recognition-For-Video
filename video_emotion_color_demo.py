@@ -173,6 +173,7 @@ def fun(in_path, out_info_path, in_finished_path, model_path, video_resolution, 
                             try:
                                 gray_face = cv2.resize(gray_face, (emotion_target_size))
                             except:
+                                print('Cannot resize gray image to model target size.')
                                 continue
 
                             gray_face = preprocess_input(gray_face, True)
@@ -184,20 +185,21 @@ def fun(in_path, out_info_path, in_finished_path, model_path, video_resolution, 
                             emotion_label_arg = np.argmax(emotion_prediction)
                             emotion_text = emotion_labels[emotion_label_arg]
                             emotion_window.append(emotion_text)
-
+                            '''
                             if len(emotion_window) > frame_window:
                                 emotion_window.pop(0)
                             try:
                                 emotion_mode = mode(emotion_window)
                             except:
                                 continue
+                            '''
                             x = int(float(face_coordinates[0]*scaling_factor_x))
                             y = int(float(face_coordinates[1]*scaling_factor_y))
                             w = int(float(face_coordinates[2]*scaling_factor_x))
                             h = int(float(face_coordinates[3]*scaling_factor_y))
+                            font = cv2.FONT_HERSHEY_DUPLEX
                             if emotion_text == 'angry':
                                 # setup text
-                                font = cv2.FONT_HERSHEY_TRIPLEX
                                 text = str(face_idx).zfill(2)+'-angry'
 
                                 # get boundary of this text
@@ -208,10 +210,9 @@ def fun(in_path, out_info_path, in_finished_path, model_path, video_resolution, 
                                 textY = y - 12
 
                                 cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (255,0,0), 4)
-                                cv2.putText(bgr_image_ori, text, (int(textX), int(textY)), font, 1.5, (255, 0, 0), 1, cv2.LINE_AA)
+                                cv2.putText(bgr_image_ori, text, (int(textX), int(textY)), font, 1, (255, 0, 0), 1, cv2.LINE_AA)
                             elif emotion_text == 'sad':
                                 # setup text
-                                font = cv2.FONT_HERSHEY_TRIPLEX
                                 text = str(face_idx).zfill(2)+'-sad'
 
                                 # get boundary of this text
@@ -222,10 +223,9 @@ def fun(in_path, out_info_path, in_finished_path, model_path, video_resolution, 
                                 textY = y - 12
 
                                 cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (0,0,255), 4)
-                                cv2.putText(bgr_image_ori, text, (int(textX), int(textY)), font, 1.5, (0,0,255), 1, cv2.LINE_AA)
+                                cv2.putText(bgr_image_ori, text, (int(textX), int(textY)), font, 1, (0,0,255), 1, cv2.LINE_AA)
                             elif emotion_text == 'happy':
                                 # setup text
-                                font = cv2.FONT_HERSHEY_TRIPLEX
                                 text = str(face_idx).zfill(2)+'-happy'
 
                                 # get boundary of this text
@@ -236,10 +236,9 @@ def fun(in_path, out_info_path, in_finished_path, model_path, video_resolution, 
                                 textY = y - 12
 
                                 cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (255,255,0), 4)
-                                cv2.putText(bgr_image_ori, text, (int(textX), int(textY)), font, 1.5, (255,255,0), 1, cv2.LINE_AA)
+                                cv2.putText(bgr_image_ori, text, (int(textX), int(textY)), font, 1, (255,255,0), 1, cv2.LINE_AA)
                             elif emotion_text == 'surprise':
                                 # setup text
-                                font = cv2.FONT_HERSHEY_TRIPLEX
                                 text = str(face_idx).zfill(2)+'-surprise'
 
                                 # get boundary of this text
@@ -250,10 +249,9 @@ def fun(in_path, out_info_path, in_finished_path, model_path, video_resolution, 
                                 textY = y - 12
 
                                 cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (0,255,255), 4)
-                                cv2.putText(bgr_image_ori, text, (int(textX), int(textY)), font, 1.5, (0,255,255), 1, cv2.LINE_AA)
+                                cv2.putText(bgr_image_ori, text, (int(textX), int(textY)), font, 1, (0,255,255), 1, cv2.LINE_AA)
                             else:
                                 # setup text
-                                font = cv2.FONT_HERSHEY_TRIPLEX
                                 text = str(face_idx).zfill(2)+'-neutral'
 
                                 # get boundary of this text
@@ -264,7 +262,7 @@ def fun(in_path, out_info_path, in_finished_path, model_path, video_resolution, 
                                 textY = y - 12
 
                                 cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (0,255,0), 4)
-                                cv2.putText(bgr_image_ori, text, (int(textX), int(textY)), font, 1.5, (0,255,0), 1, cv2.LINE_AA)
+                                cv2.putText(bgr_image_ori, text, (int(textX), int(textY)), font, 1, (0,255,0), 1, cv2.LINE_AA)
                             
                         if not detect_emo:
                             color = np.asarray((0, 0, 0))
