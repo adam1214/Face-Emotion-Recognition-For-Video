@@ -209,8 +209,8 @@ def fun(in_path, out_info_path, in_finished_path, model_path, video_resolution, 
                                 textX = (w - textsize[0]) / 2 + x
                                 textY = y - 12
 
-                                cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (255,0,0), 4)
-                                cv2.putText(bgr_image_ori, text, (int(textX), int(textY)), font, 1, (255, 0, 0), 1, cv2.LINE_AA)
+                                cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (25,35,230), 4)
+                                cv2.putText(bgr_image_ori, text, (int(textX), int(textY)), font, 1, (25,35,230), 1, cv2.LINE_AA)
                             elif emotion_text == 'sad':
                                 # setup text
                                 text = str(face_idx).zfill(2)+'-sad'
@@ -222,8 +222,8 @@ def fun(in_path, out_info_path, in_finished_path, model_path, video_resolution, 
                                 textX = (w - textsize[0]) / 2 + x
                                 textY = y - 12
 
-                                cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (0,0,255), 4)
-                                cv2.putText(bgr_image_ori, text, (int(textX), int(textY)), font, 1, (0,0,255), 1, cv2.LINE_AA)
+                                cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (195,145,110), 4)
+                                cv2.putText(bgr_image_ori, text, (int(textX), int(textY)), font, 1, (195,145,110), 1, cv2.LINE_AA)
                             elif emotion_text == 'happy':
                                 # setup text
                                 text = str(face_idx).zfill(2)+'-happy'
@@ -235,8 +235,8 @@ def fun(in_path, out_info_path, in_finished_path, model_path, video_resolution, 
                                 textX = (w - textsize[0]) / 2 + x
                                 textY = y - 12
 
-                                cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (255,255,0), 4)
-                                cv2.putText(bgr_image_ori, text, (int(textX), int(textY)), font, 1, (255,255,0), 1, cv2.LINE_AA)
+                                cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (70,200,255), 4)
+                                cv2.putText(bgr_image_ori, text, (int(textX), int(textY)), font, 1, (70,200,255), 1, cv2.LINE_AA)
                             elif emotion_text == 'surprise':
                                 # setup text
                                 text = str(face_idx).zfill(2)+'-surprise'
@@ -248,8 +248,8 @@ def fun(in_path, out_info_path, in_finished_path, model_path, video_resolution, 
                                 textX = (w - textsize[0]) / 2 + x
                                 textY = y - 12
 
-                                cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (0,255,255), 4)
-                                cv2.putText(bgr_image_ori, text, (int(textX), int(textY)), font, 1, (0,255,255), 1, cv2.LINE_AA)
+                                cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (180,240,255), 4)
+                                cv2.putText(bgr_image_ori, text, (int(textX), int(textY)), font, 1, (180,240,255), 1, cv2.LINE_AA)
                             else:
                                 # setup text
                                 text = str(face_idx).zfill(2)+'-neutral'
@@ -261,8 +261,8 @@ def fun(in_path, out_info_path, in_finished_path, model_path, video_resolution, 
                                 textX = (w - textsize[0]) / 2 + x
                                 textY = y - 12
 
-                                cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (0,255,0), 4)
-                                cv2.putText(bgr_image_ori, text, (int(textX), int(textY)), font, 1, (0,255,0), 1, cv2.LINE_AA)
+                                cv2.rectangle(bgr_image_ori, (x, y), (x+w, y+h), (160,190,125), 4)
+                                cv2.putText(bgr_image_ori, text, (int(textX), int(textY)), font, 1, (160,190,125), 1, cv2.LINE_AA)
                             
                         if not detect_emo:
                             color = np.asarray((0, 0, 0))
