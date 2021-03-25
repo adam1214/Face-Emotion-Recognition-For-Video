@@ -13,5 +13,5 @@ else
     docker run --rm \
     -v ${FER_ROOT}:/media \
     biicgitlab.ee.nthu.edu.tw:5050/prod/engineer/fer_offline \
-    /bin/bash -c "cd /media; python3 main.py fer_input/$1 fer_result/$1 fer_finished/$1 fer_model/ 720p compress.zip; chmod -R 777 ."
+    /bin/bash -c "cd /media; python3 main.py fer_input/$1 fer_result/$1 fer_finished/$1 fer_model/ 720p $1.zip; chmod -R 777 ."
 fi
